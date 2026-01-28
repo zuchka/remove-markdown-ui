@@ -75,9 +75,6 @@ export default function Index() {
               <Sparkles className="w-5 h-5 text-primary" />
             </div>
             <div>
-              <h2 className="text-lg font-semibold text-foreground mb-2">
-                Interactive Demo
-              </h2>
               <p className="text-muted-foreground">
                 This is a live demo of{" "}
                 <code className="px-2 py-0.5 bg-muted rounded text-sm font-mono text-primary">
