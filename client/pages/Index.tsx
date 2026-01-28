@@ -270,7 +270,7 @@ export default function Index() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                 <a
-                  href="https://www.builder.io"
+                  href="https://www.builder.io?utm_source=tool&utm_content=ma"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary to-purple-600 text-white rounded-xl hover:shadow-lg hover:shadow-primary/30 transition-all font-semibold text-base group"
@@ -279,7 +279,7 @@ export default function Index() {
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </a>
                 <a
-                  href="https://www.builder.io/c/docs"
+                  href="https://www.builder.io/c/docs?utm_source=tool&utm_content=ma"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-6 py-3 bg-white border-2 border-primary/20 text-foreground rounded-xl hover:border-primary/40 transition-colors font-medium text-base"
@@ -439,7 +439,7 @@ export default function Index() {
 
       {/* Floating Builder Badge */}
       <a
-        href="https://www.builder.io"
+        href="https://www.builder.io?utm_source=tool&utm_content=ma"
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-6 right-6 z-50 group"
