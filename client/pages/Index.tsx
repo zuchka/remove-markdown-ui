@@ -79,14 +79,17 @@ export default function Index() {
                 Interactive Demo
               </h2>
               <p className="text-muted-foreground">
-                This is a live demonstration of{" "}
+                This is a live demo of{" "}
                 <code className="px-2 py-0.5 bg-muted rounded text-sm font-mono text-primary">
                   remove-markdown
                 </code>
-                , one of the oldest and most trusted markdown parsers in JavaScript. Edit the markdown on the left to instantly see the
-                stripped output on the right. Perfect for extracting clean text
-                from markdown content for search indexing, previews, or text
-                analysis.
+                , one of the oldest and most trusted markdown parsers in JavaScript.
+                <br />
+                <br />
+                Edit the markdown on the left to instantly see the stripped output on the right.
+                <br />
+                <br />
+                It's perfect for extracting clean text from markdown content for search indexing, AI agents, NLP scripts, etc.
               </p>
             </div>
           </div>
