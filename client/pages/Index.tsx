@@ -90,9 +90,7 @@ export default function Index() {
                 </code>
                 , one of the oldest and most trusted markdown parsers in JavaScript.
                 <br />
-                <br />
                 Edit the markdown on the left to instantly see the stripped output on the right.
-                <br />
                 <br />
                 It's perfect for extracting clean text from markdown content for search indexing, AI agents, NLP scripts, etc.
               </p>
