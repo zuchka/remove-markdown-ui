@@ -250,7 +250,7 @@ export default function Index() {
                 <Zap className="w-8 h-8 text-white" />
               </div>
               <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-                Built with Builder
+                Made with Builder
               </h2>
               <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
                 This demo app was created in minutes using{" "}
@@ -412,7 +412,7 @@ export default function Index() {
       >
         <div className="flex items-center gap-3 bg-gradient-to-r from-primary to-purple-600 text-white px-5 py-3 rounded-full shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 transition-all hover:scale-105">
           <Zap className="w-4 h-4" />
-          <span className="font-semibold text-sm">Built with Builder</span>
+          <span className="font-semibold text-sm">Made with Builder</span>
           <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
         </div>
       </a>
