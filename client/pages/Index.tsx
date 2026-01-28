@@ -50,18 +50,26 @@ export default function Index() {
       {/* Header */}
       <header className="border-b border-border bg-white/50 backdrop-blur-sm sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center shadow-lg shadow-primary/20">
-              <FileText className="w-6 h-6 text-white" />
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center shadow-lg shadow-primary/20">
+                <FileText className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-foreground">
+                  Remove Markdown
+                </h1>
+                <p className="text-sm text-muted-foreground">
+                  Official website for the remove-markdown library
+                </p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-2xl font-bold text-foreground">
-                Remove Markdown
-              </h1>
-              <p className="text-sm text-muted-foreground">
-                Official website for the remove-markdown library
-              </p>
-            </div>
+            <a
+              href="#get-started"
+              className="px-4 py-2 text-sm font-medium text-primary hover:text-primary/80 hover:bg-primary/5 rounded-lg transition-colors"
+            >
+              Get Started
+            </a>
           </div>
         </div>
       </header>
@@ -333,7 +341,7 @@ export default function Index() {
         </div>
 
         {/* Installation */}
-        <div className="mt-12 bg-white rounded-2xl p-8 border border-border shadow-sm">
+        <div id="get-started" className="mt-12 bg-white rounded-2xl p-8 border border-border shadow-sm">
           <h2 className="text-xl font-semibold text-foreground mb-4">
             Get Started
           </h2>
