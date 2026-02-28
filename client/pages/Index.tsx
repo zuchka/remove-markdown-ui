@@ -26,43 +26,83 @@ import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/hooks/use-toast";
 
-const DEFAULT_MARKDOWN = `# Welcome to Remove Markdown
+const DEFAULT_MARKDOWN = `# Welcome to Remove Markdown! 🎉
 
-This is a **powerful** library that _strips_ markdown syntax from your text.
+This is a **powerful** library that _strips_ markdown syntax from your text while preserving readability.
 
-## Features
+## 🎯 Test Different Options
 
-* Removes **bold** and *italic* formatting
-- Strips [links](https://example.com) and ![images](test.jpg "Alt text here")
-+ Cleans up \`code blocks\`
-* Handles ~~strikethrough~~ text
-- Removes headers and lists
+Toggle the **Configuration Options** below to see how each flag transforms this content!
 
-### Try Different Options
+### 📝 Lists (stripListLeaders & listUnicodeChar)
 
-Edit the markdown on the left and toggle the options below to see how different flags affect the output!
+Unordered lists with different markers:
+* First item with asterisk
+- Second item with dash
++ Third item with plus
 
-> Blockquotes are also handled gracefully
+Ordered lists:
+1. First ordered item
+2. Second ordered item
+3. Third ordered item
+
+### 🔗 Links (replaceLinksWithURL & separateLinksAndTexts)
+
+Try toggling link options:
+- Visit the [official documentation](https://github.com/stiang/remove-markdown)
+- Check out [NPM package](https://www.npmjs.com/package/remove-markdown)
+- Read more on [Builder.io](https://www.builder.io)
+
+### 🖼️ Images (useImgAltText)
+
+Toggle to show/hide alt text:
+![Beautiful landscape photo](landscape.jpg "Mountain view")
+![Developer coding](coder.jpg)
+
+### 💻 Code Examples
+
+Inline code like \`const x = 42\` and \`npm install\` stays readable.
 
 \`\`\`javascript
-// Even code blocks!
-const demo = "This will be stripped";
+// Configuration example - try the options below!
+import removeMd from 'remove-markdown';
+
+const options = {
+  stripListLeaders: true,
+  gfm: true,
+  useImgAltText: true
+};
+
+const result = removeMd(markdown, options);
+console.log('Clean text:', result);
 \`\`\`
 
-1. Ordered lists
-2. Are converted
-3. To plain text
+### 🎨 GFM Features (gfm flag)
 
-Check out the [documentation](https://github.com/stiang/remove-markdown) or visit our <a href="https://example.com">website</a>.
+~~Strikethrough text~~ requires GFM support to be removed.
 
----
+| Table | Support |
+|-------|---------|
+| GFM   | Yes     |
+
+### 📌 HTML Tags (htmlTagsToSkip)
+
+This has <strong>HTML bold</strong> and <em>HTML italic</em>.
+Try adding "strong,em" to skip these tags!
+
+### 🔤 Abbreviations (abbr flag)
 
 *[HTML]: HyperText Markup Language
 *[GFM]: GitHub Flavored Markdown
+*[API]: Application Programming Interface
 
-The HTML and GFM abbreviations can be toggled on/off.
+The HTML, GFM, and API abbreviations can be toggled with the abbr option.
 
-**remove-markdown** makes it easy to extract clean text from markdown content.`;
+---
+
+> **Pro Tip**: Use the "Copy Code" button to get the exact configuration for your use case!
+
+Made with ❤️ by the **remove-markdown** community.`;
 
 // Default options matching the library defaults
 const DEFAULT_OPTIONS = {
