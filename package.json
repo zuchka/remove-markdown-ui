@@ -7,11 +7,14 @@
     "dev:client": "vite",
     "dev:server": "tsx watch server/index.ts",
     "build": "vite build",
+    "start": "NODE_ENV=production tsx server/index.ts",
     "test": "vitest --run",
     "format.fix": "prettier --write .",
     "typecheck": "tsc"
   },
   "dependencies": {
+    "express": "^4.21.2",
+    "cors": "^2.8.5",
     "nanoid": "^5.1.6",
     "react-markdown": "^10.1.0",
     "remark-gfm": "^4.0.1",
@@ -19,6 +22,9 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "concurrently": "^9.1.2",
     "@hookform/resolvers": "^5.2.1",
     "@radix-ui/react-accordion": "^1.2.11",
     "@radix-ui/react-alert-dialog": "^1.1.14",
