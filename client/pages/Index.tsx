@@ -279,20 +279,20 @@ export default function Index() {
   }).filter(item => item.library);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50/30 to-blue-50/20">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b border-border bg-white/50 backdrop-blur-sm sticky top-0 z-10">
+      <header className="border-b-4 border-black bg-white shadow-[0_4px_0px_0px_black] sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center shadow-lg shadow-primary/20">
+              <div className="w-10 h-10 rounded-md bg-primary border-3 border-black shadow-[4px_4px_0px_0px_black] flex items-center justify-center">
                 <FileText className="w-5 h-5 text-white" />
               </div>
               <div>
                 <h1 className="text-xl font-bold text-foreground">
                   Markdown Playground
                 </h1>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-muted-foreground font-medium">
                   The Regex101 but for Markdown
                 </p>
               </div>
@@ -337,13 +337,13 @@ export default function Index() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Info Banner */}
-        <div className="mb-6 bg-gradient-to-r from-primary/10 via-purple-500/10 to-blue-500/10 border border-primary/20 rounded-xl p-4">
+        <div className="mb-6 neo-bg-yellow border-4 border-black rounded-md p-4 shadow-[8px_8px_0px_0px_black]">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-              <Sparkles className="w-4 h-4 text-primary" />
+            <div className="w-8 h-8 rounded-md bg-white border-3 border-black flex items-center justify-center flex-shrink-0">
+              <Sparkles className="w-4 h-4 text-black" />
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-foreground font-medium">
                 Compare multiple markdown libraries side-by-side. Select libraries below to see how each one processes your markdown.
               </p>
             </div>
@@ -352,7 +352,7 @@ export default function Index() {
 
         {/* Library Selector */}
         <div className="mb-6">
-          <label className="block text-sm font-medium text-foreground mb-2">
+          <label className="block text-sm font-bold text-foreground mb-2">
             Select Libraries to Compare
           </label>
           <LibrarySelector
@@ -366,27 +366,27 @@ export default function Index() {
         {/* Editor and Output Grid */}
         <div className="grid lg:grid-cols-2 gap-6 min-h-[600px]">
           {/* Input Panel */}
-          <div className="bg-white rounded-xl shadow-sm border border-border overflow-hidden flex flex-col">
-            <div className="bg-gradient-to-r from-primary/5 to-purple-500/5 border-b border-border px-4 py-3">
+          <div className="bg-white rounded-md border-4 border-black shadow-[8px_8px_0px_0px_black] overflow-hidden flex flex-col">
+            <div className="bg-muted border-b-4 border-black px-4 py-3">
               <div className="flex items-center gap-2">
                 <div className="flex items-center gap-1.5">
-                  <div className="w-2 h-2 rounded-full bg-red-400"></div>
-                  <div className="w-2 h-2 rounded-full bg-yellow-400"></div>
-                  <div className="w-2 h-2 rounded-full bg-green-400"></div>
+                  <div className="w-2 h-2 rounded-full bg-destructive border-2 border-black"></div>
+                  <div className="w-2 h-2 rounded-full bg-accent border-2 border-black"></div>
+                  <div className="w-2 h-2 rounded-full neo-bg-green border-2 border-black"></div>
                 </div>
-                <span className="ml-2 text-sm font-medium text-foreground">
+                <span className="ml-2 text-sm font-bold text-foreground">
                   input.md
                 </span>
               </div>
             </div>
             <div className="p-4 flex-1 flex flex-col">
-              <label className="block text-sm font-medium text-foreground mb-2">
+              <label className="block text-sm font-bold text-foreground mb-2">
                 Markdown Input
               </label>
               <textarea
                 value={markdown}
                 onChange={(e) => setMarkdown(e.target.value)}
-                className="flex-1 w-full p-4 bg-muted/30 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent font-mono text-sm resize-none"
+                className="flex-1 w-full p-4 bg-white border-3 border-black rounded-md focus:outline-none focus:shadow-[4px_4px_0px_0px_black] font-mono text-sm resize-none transition-shadow"
                 placeholder="Enter your markdown here..."
               />
             </div>
@@ -394,15 +394,15 @@ export default function Index() {
 
           {/* Output Grid */}
           <div className="flex flex-col">
-            <label className="block text-sm font-medium text-foreground mb-2">
+            <label className="block text-sm font-bold text-foreground mb-2">
               Output ({selectedLibraries.length} {selectedLibraries.length === 1 ? 'library' : 'libraries'})
             </label>
             {outputData.length > 0 ? (
               <OutputGrid outputs={outputData} onShowAST={handleShowAST} />
             ) : (
-              <div className="bg-white rounded-xl shadow-sm border border-border p-12 text-center">
+              <div className="bg-white rounded-md border-4 border-black shadow-[8px_8px_0px_0px_black] p-12 text-center">
                 <FileText className="w-16 h-16 mx-auto mb-4 text-muted-foreground opacity-30" />
-                <p className="text-muted-foreground text-sm">
+                <p className="text-muted-foreground text-sm font-medium">
                   Select at least one library to see output
                 </p>
               </div>
@@ -419,17 +419,16 @@ export default function Index() {
         />
 
         {/* Builder CTA */}
-        <div className="mt-12 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary via-purple-600 to-blue-600 opacity-5 blur-3xl"></div>
-          <div className="relative bg-gradient-to-br from-primary/10 via-purple-500/10 to-blue-500/10 rounded-2xl border-2 border-primary/20 p-8 md:p-10">
+        <div className="mt-12">
+          <div className="bg-primary rounded-md border-4 border-black p-8 md:p-10 shadow-[12px_12px_0px_0px_black]">
             <div className="max-w-3xl mx-auto text-center">
-              <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br from-primary to-purple-600 mb-4 shadow-lg shadow-primary/30">
-                <Zap className="w-7 h-7 text-white" />
+              <div className="inline-flex items-center justify-center w-14 h-14 rounded-md bg-white border-3 border-black mb-4 shadow-[4px_4px_0px_0px_black]">
+                <Zap className="w-7 h-7 text-black" />
               </div>
-              <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-3">
+              <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
                 Made with Builder
               </h2>
-              <p className="text-base text-muted-foreground mb-6">
+              <p className="text-base text-white/95 mb-6 font-medium">
                 This playground was created using Builder - the AI-powered platform that turns your ideas into production-ready code.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
@@ -437,7 +436,7 @@ export default function Index() {
                   href="https://www.builder.io?utm_source=tool&utm_content=md"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-primary to-purple-600 text-white rounded-lg hover:shadow-lg hover:shadow-primary/30 transition-all font-semibold text-sm group"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-black border-3 border-black rounded-md shadow-[6px_6px_0px_0px_black] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[3px_3px_0px_0px_black] active:translate-x-[6px] active:translate-y-[6px] active:shadow-none transition-all font-bold text-sm group"
                 >
                   Start Building for Free
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -449,10 +448,10 @@ export default function Index() {
       </main>
 
       {/* Footer */}
-      <footer className="mt-12 border-t border-border bg-white/50 backdrop-blur-sm">
+      <footer className="mt-12 border-t-4 border-black bg-white shadow-[0_-4px_0px_0px_black]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-3">
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-muted-foreground font-medium">
               The Regex101 but for Markdown - Compare and test markdown libraries
             </p>
             <div className="flex items-center gap-2">
@@ -460,7 +459,7 @@ export default function Index() {
                 href="https://www.builder.io"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-xs text-muted-foreground hover:text-primary transition-colors"
+                className="text-xs text-muted-foreground hover:text-primary transition-colors font-semibold"
               >
                 Made with Builder.io
               </a>

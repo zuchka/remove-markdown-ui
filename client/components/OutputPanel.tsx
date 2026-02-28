@@ -42,17 +42,17 @@ export function OutputPanel({
   const charCount = output.length;
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-border overflow-hidden flex flex-col h-full">
+    <div className="bg-white rounded-md border-4 border-black shadow-[8px_8px_0px_0px_black] overflow-hidden flex flex-col h-full">
       {/* Header */}
-      <div className="bg-gradient-to-r from-primary/5 to-purple-500/5 border-b border-border px-4 py-3">
+      <div className="bg-muted border-b-4 border-black px-4 py-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-1.5">
-              <div className="w-2 h-2 rounded-full bg-green-400"></div>
-              <div className="w-2 h-2 rounded-full bg-yellow-400"></div>
-              <div className="w-2 h-2 rounded-full bg-red-400"></div>
+              <div className="w-2 h-2 rounded-full neo-bg-green border-2 border-black"></div>
+              <div className="w-2 h-2 rounded-full bg-accent border-2 border-black"></div>
+              <div className="w-2 h-2 rounded-full bg-destructive border-2 border-black"></div>
             </div>
-            <span className="ml-2 text-sm font-medium text-foreground">
+            <span className="ml-2 text-sm font-bold text-foreground">
               {library.name}
             </span>
             <Badge variant="outline" className="text-xs">
@@ -103,11 +103,11 @@ export function OutputPanel({
         </div>
 
         {/* Stats */}
-        <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
+        <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground font-semibold">
           <span>{charCount} chars</span>
           <span>{wordCount} words</span>
           {processingTime !== undefined && (
-            <span className="text-primary font-medium">
+            <span className="text-primary font-bold">
               {processingTime.toFixed(2)}ms
             </span>
           )}
@@ -115,11 +115,11 @@ export function OutputPanel({
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-auto p-4 bg-muted/30">
+      <div className="flex-1 overflow-auto p-4 bg-white">
         {error ? (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-            <p className="text-sm text-red-600 font-medium">Error:</p>
-            <p className="text-sm text-red-700 mt-1">{error}</p>
+          <div className="bg-destructive/10 border-3 border-black rounded-md p-4 shadow-[4px_4px_0px_0px_black]">
+            <p className="text-sm text-destructive font-bold">Error:</p>
+            <p className="text-sm text-destructive mt-1 font-medium">{error}</p>
           </div>
         ) : output ? (
           isHTML ? (
@@ -128,14 +128,14 @@ export function OutputPanel({
               dangerouslySetInnerHTML={{ __html: output }}
             />
           ) : (
-            <div className="font-mono text-sm whitespace-pre-wrap text-foreground">
+            <div className="font-mono text-sm whitespace-pre-wrap text-foreground font-medium">
               {output}
             </div>
           )
         ) : (
           <div className="text-center text-muted-foreground italic py-8">
             <FileText className="w-12 h-12 mx-auto mb-2 opacity-30" />
-            <p className="text-sm">Output will appear here...</p>
+            <p className="text-sm font-medium">Output will appear here...</p>
           </div>
         )}
       </div>
