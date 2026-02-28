@@ -1,22 +1,26 @@
 import { useState, useEffect } from "react";
 import removeMd from "remove-markdown";
-import { 
-  Sparkles, 
-  FileText, 
-  Copy, 
-  Check, 
-  Zap, 
-  ArrowRight, 
-  Settings2, 
-  ChevronDown, 
-  Code2, 
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import {
+  Sparkles,
+  FileText,
+  Copy,
+  Check,
+  Zap,
+  ArrowRight,
+  Settings2,
+  ChevronDown,
+  Code2,
   RotateCcw,
   List,
   Link,
   Image,
   Hash,
   Eye,
-  EyeOff
+  EyeOff,
+  Edit,
+  FileCode
 } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Switch } from "@/components/ui/switch";
@@ -124,6 +128,7 @@ export default function Index() {
   const [codeCopied, setCodeCopied] = useState(false);
   const [optionsOpen, setOptionsOpen] = useState(true);
   const [showDiff, setShowDiff] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
   const [options, setOptions] = useState<RemoveMarkdownOptions>(DEFAULT_OPTIONS);
   const [htmlTagsInput, setHtmlTagsInput] = useState('');
   const { toast } = useToast();
@@ -660,25 +665,59 @@ export default function Index() {
           {/* Input Panel */}
           <div className="bg-white rounded-2xl shadow-xl border border-border overflow-hidden">
             <div className="bg-gradient-to-r from-primary/5 to-purple-500/5 border-b border-border px-6 py-4">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-red-400"></div>
-                <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
-                <div className="w-3 h-3 rounded-full bg-green-400"></div>
-                <span className="ml-3 text-sm font-medium text-foreground">
-                  input.md
-                </span>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-red-400"></div>
+                  <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
+                  <div className="w-3 h-3 rounded-full bg-green-400"></div>
+                  <span className="ml-3 text-sm font-medium text-foreground">
+                    input.md
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setShowPreview(false)}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
+                      !showPreview
+                        ? 'bg-primary text-primary-foreground'
+                        : 'text-muted-foreground hover:bg-muted/50'
+                    }`}
+                  >
+                    <Edit className="w-3.5 h-3.5" />
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => setShowPreview(true)}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
+                      showPreview
+                        ? 'bg-primary text-primary-foreground'
+                        : 'text-muted-foreground hover:bg-muted/50'
+                    }`}
+                  >
+                    <FileCode className="w-3.5 h-3.5" />
+                    Preview
+                  </button>
+                </div>
               </div>
             </div>
             <div className="p-6">
               <label className="block text-sm font-medium text-foreground mb-3">
-                Markdown Input
+                {showPreview ? 'Markdown Preview' : 'Markdown Input'}
               </label>
-              <textarea
-                value={markdown}
-                onChange={(e) => setMarkdown(e.target.value)}
-                className="w-full h-[500px] p-4 bg-muted/30 border border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent font-mono text-sm resize-none"
-                placeholder="Enter your markdown here..."
-              />
+              {!showPreview ? (
+                <textarea
+                  value={markdown}
+                  onChange={(e) => setMarkdown(e.target.value)}
+                  className="w-full h-[500px] p-4 bg-muted/30 border border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent font-mono text-sm resize-none"
+                  placeholder="Enter your markdown here..."
+                />
+              ) : (
+                <div className="w-full h-[500px] p-4 bg-muted/30 border border-input rounded-xl overflow-auto prose prose-sm max-w-none dark:prose-invert">
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    {markdown}
+                  </ReactMarkdown>
+                </div>
+              )}
             </div>
           </div>
 
