@@ -10,6 +10,8 @@
     "typecheck": "tsc"
   },
   "dependencies": {
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
     "remove-markdown": "^0.6.3",
     "zod": "^3.25.76"
   },

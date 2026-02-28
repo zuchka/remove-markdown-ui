@@ -1,48 +1,299 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import removeMd from "remove-markdown";
-import { Sparkles, FileText, Copy, Check, Zap, ArrowRight } from "lucide-react";
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import {
+  Sparkles,
+  FileText,
+  Copy,
+  Check,
+  Zap,
+  ArrowRight,
+  Settings2,
+  ChevronDown,
+  Code2,
+  RotateCcw,
+  List,
+  Link,
+  Image,
+  Hash,
+  Eye,
+  EyeOff,
+  Edit,
+  FileCode
+} from "lucide-react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { useToast } from "@/hooks/use-toast";
 
-const DEFAULT_MARKDOWN = `# Welcome to Remove Markdown
+const DEFAULT_MARKDOWN = `# Welcome to Remove Markdown! 🎉
 
-This is a **powerful** library that _strips_ markdown syntax from your text.
+This is a **powerful** library that _strips_ markdown syntax from your text while preserving readability.
 
-## Features
+## 🎯 Test Different Options
 
-- Removes **bold** and *italic* formatting
-- Strips [links](https://example.com) 
-- Cleans up \`code blocks\`
-- Handles ~~strikethrough~~ text
-- Removes headers and lists
+Toggle the **Configuration Options** below to see how each flag transforms this content!
 
-### Try It Out
+### 📝 Lists (stripListLeaders & listUnicodeChar)
 
-Edit the markdown on the left to see the plain text output on the right!
+Unordered lists with different markers:
+* First item with asterisk
+- Second item with dash
++ Third item with plus
 
-> Blockquotes are also handled gracefully
+Ordered lists:
+1. First ordered item
+2. Second ordered item
+3. Third ordered item
+
+### 🔗 Links (replaceLinksWithURL & separateLinksAndTexts)
+
+Try toggling link options:
+- Visit the [official documentation](https://github.com/stiang/remove-markdown)
+- Check out [NPM package](https://www.npmjs.com/package/remove-markdown)
+- Read more on [Builder.io](https://www.builder.io)
+
+### 🖼️ Images (useImgAltText)
+
+Toggle to show/hide alt text:
+![Beautiful landscape photo](landscape.jpg "Mountain view")
+![Developer coding](coder.jpg)
+
+### 💻 Code Examples
+
+Inline code like \`const x = 42\` and \`npm install\` stays readable.
 
 \`\`\`javascript
-// Even code blocks!
-const demo = "This will be stripped";
+// Configuration example - try the options below!
+import removeMd from 'remove-markdown';
+
+const options = {
+  stripListLeaders: true,
+  gfm: true,
+  useImgAltText: true
+};
+
+const result = removeMd(markdown, options);
+console.log('Clean text:', result);
 \`\`\`
 
-1. Ordered lists
-2. Are converted
-3. To plain text
+### 🎨 GFM Features (gfm flag)
+
+~~Strikethrough text~~ requires GFM support to be removed.
+
+| Table | Support |
+|-------|---------|
+| GFM   | Yes     |
+
+### 📌 HTML Tags (htmlTagsToSkip)
+
+This has <strong>HTML bold</strong> and <em>HTML italic</em>.
+Try adding "strong,em" to skip these tags!
+
+### 🔤 Abbreviations (abbr flag)
+
+*[HTML]: HyperText Markup Language
+*[GFM]: GitHub Flavored Markdown
+*[API]: Application Programming Interface
+
+The HTML, GFM, and API abbreviations can be toggled with the abbr option.
 
 ---
 
-**remove-markdown** makes it easy to extract clean text from markdown content.`;
+> **Pro Tip**: Use the "Copy Code" button to get the exact configuration for your use case!
+
+Made with ❤️ by the **remove-markdown** community.`;
+
+// Default options matching the library defaults
+const DEFAULT_OPTIONS = {
+  stripListLeaders: true,
+  listUnicodeChar: '',
+  gfm: true,
+  useImgAltText: true,
+  abbr: false,
+  replaceLinksWithURL: false,
+  separateLinksAndTexts: '',
+  htmlTagsToSkip: [] as string[],
+};
+
+type RemoveMarkdownOptions = typeof DEFAULT_OPTIONS;
 
 export default function Index() {
   const [markdown, setMarkdown] = useState(DEFAULT_MARKDOWN);
   const [copied, setCopied] = useState(false);
+  const [codeCopied, setCodeCopied] = useState(false);
+  const [optionsOpen, setOptionsOpen] = useState(true);
+  const [showDiff, setShowDiff] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
+  const [options, setOptions] = useState<RemoveMarkdownOptions>(DEFAULT_OPTIONS);
+  const [htmlTagsInput, setHtmlTagsInput] = useState('');
+  const { toast } = useToast();
 
-  const plainText = removeMd(markdown);
+  // Parse URL parameters on mount
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const urlOptions: Partial<RemoveMarkdownOptions> = {};
+    
+    if (params.has('sl')) urlOptions.stripListLeaders = params.get('sl') === '1';
+    if (params.has('luc')) urlOptions.listUnicodeChar = params.get('luc') || '';
+    if (params.has('gfm')) urlOptions.gfm = params.get('gfm') === '1';
+    if (params.has('img')) urlOptions.useImgAltText = params.get('img') === '1';
+    if (params.has('abbr')) urlOptions.abbr = params.get('abbr') === '1';
+    if (params.has('url')) urlOptions.replaceLinksWithURL = params.get('url') === '1';
+    if (params.has('sep')) urlOptions.separateLinksAndTexts = params.get('sep') || '';
+    if (params.has('skip')) {
+      const tags = params.get('skip');
+      if (tags) {
+        urlOptions.htmlTagsToSkip = tags.split(',').filter(t => t.trim());
+        setHtmlTagsInput(tags);
+      }
+    }
+    
+    if (Object.keys(urlOptions).length > 0) {
+      setOptions({ ...DEFAULT_OPTIONS, ...urlOptions });
+    }
+  }, []);
+
+  // Update URL parameters when options change
+  useEffect(() => {
+    const params = new URLSearchParams();
+    
+    if (options.stripListLeaders !== DEFAULT_OPTIONS.stripListLeaders) 
+      params.set('sl', options.stripListLeaders ? '1' : '0');
+    if (options.listUnicodeChar) 
+      params.set('luc', options.listUnicodeChar);
+    if (options.gfm !== DEFAULT_OPTIONS.gfm) 
+      params.set('gfm', options.gfm ? '1' : '0');
+    if (options.useImgAltText !== DEFAULT_OPTIONS.useImgAltText) 
+      params.set('img', options.useImgAltText ? '1' : '0');
+    if (options.abbr !== DEFAULT_OPTIONS.abbr) 
+      params.set('abbr', options.abbr ? '1' : '0');
+    if (options.replaceLinksWithURL !== DEFAULT_OPTIONS.replaceLinksWithURL) 
+      params.set('url', options.replaceLinksWithURL ? '1' : '0');
+    if (options.separateLinksAndTexts) 
+      params.set('sep', options.separateLinksAndTexts);
+    if (options.htmlTagsToSkip.length > 0) 
+      params.set('skip', options.htmlTagsToSkip.join(','));
+    
+    const newUrl = params.toString() 
+      ? `${window.location.pathname}?${params.toString()}`
+      : window.location.pathname;
+    window.history.replaceState({}, '', newUrl);
+  }, [options]);
+
+  const plainText = removeMd(markdown, {
+    ...options,
+    htmlTagsToSkip: options.htmlTagsToSkip.length > 0 ? options.htmlTagsToSkip : undefined,
+  } as any);
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(plainText);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleCopyCode = async () => {
+    const code = generateCodeSnippet();
+    await navigator.clipboard.writeText(code);
+    setCodeCopied(true);
+    toast({
+      title: "Code copied!",
+      description: "The code snippet has been copied to your clipboard.",
+    });
+    setTimeout(() => setCodeCopied(false), 2000);
+  };
+
+  const generateCodeSnippet = () => {
+    const optionsCode: string[] = [];
+    
+    if (options.stripListLeaders !== DEFAULT_OPTIONS.stripListLeaders) {
+      optionsCode.push(`  stripListLeaders: ${options.stripListLeaders}`);
+    }
+    if (options.listUnicodeChar) {
+      optionsCode.push(`  listUnicodeChar: '${options.listUnicodeChar}'`);
+    }
+    if (options.gfm !== DEFAULT_OPTIONS.gfm) {
+      optionsCode.push(`  gfm: ${options.gfm}`);
+    }
+    if (options.useImgAltText !== DEFAULT_OPTIONS.useImgAltText) {
+      optionsCode.push(`  useImgAltText: ${options.useImgAltText}`);
+    }
+    if (options.abbr !== DEFAULT_OPTIONS.abbr) {
+      optionsCode.push(`  abbr: ${options.abbr}`);
+    }
+    if (options.replaceLinksWithURL !== DEFAULT_OPTIONS.replaceLinksWithURL) {
+      optionsCode.push(`  replaceLinksWithURL: ${options.replaceLinksWithURL}`);
+    }
+    if (options.separateLinksAndTexts) {
+      optionsCode.push(`  separateLinksAndTexts: '${options.separateLinksAndTexts}'`);
+    }
+    if (options.htmlTagsToSkip.length > 0) {
+      optionsCode.push(`  htmlTagsToSkip: [${options.htmlTagsToSkip.map(t => `'${t}'`).join(', ')}]`);
+    }
+
+    if (optionsCode.length === 0) {
+      return `import removeMd from 'remove-markdown';\n\nconst plainText = removeMd(markdown);`;
+    }
+
+    return `import removeMd from 'remove-markdown';\n\nconst plainText = removeMd(markdown, {\n${optionsCode.join(',\n')}\n});`;
+  };
+
+  const handleResetOptions = () => {
+    setOptions(DEFAULT_OPTIONS);
+    setHtmlTagsInput('');
+    toast({
+      title: "Options reset",
+      description: "All options have been reset to their default values.",
+    });
+  };
+
+  const handleHtmlTagsChange = (value: string) => {
+    setHtmlTagsInput(value);
+    const tags = value
+      .split(',')
+      .map(t => t.trim())
+      .filter(t => t.length > 0);
+    setOptions({ ...options, htmlTagsToSkip: tags });
+  };
+
+  const renderDiffView = () => {
+    const lines = markdown.split('\n');
+    const outputLines = plainText.split('\n');
+    
+    return (
+      <div className="space-y-1">
+        {lines.map((line, i) => {
+          const output = outputLines[i] || '';
+          const changed = line !== output;
+          
+          return (
+            <div key={i} className="font-mono text-sm">
+              {changed ? (
+                <div className="space-y-0.5">
+                  <div className="text-red-600 bg-red-50 px-2 py-0.5 rounded">
+                    <span className="text-red-400 mr-2">-</span>
+                    {line}
+                  </div>
+                  <div className="text-green-600 bg-green-50 px-2 py-0.5 rounded">
+                    <span className="text-green-400 mr-2">+</span>
+                    {output}
+                  </div>
+                </div>
+              ) : (
+                <div className="text-muted-foreground px-2 py-0.5">
+                  <span className="mr-2"> </span>
+                  {line}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    );
   };
 
   return (
@@ -95,30 +346,378 @@ export default function Index() {
           </div>
         </div>
 
+        {/* Options Panel */}
+        <Collapsible open={optionsOpen} onOpenChange={setOptionsOpen} className="mb-6">
+          <div className="bg-white rounded-2xl shadow-xl border border-border overflow-hidden">
+            <CollapsibleTrigger className="w-full px-6 py-4 bg-gradient-to-r from-primary/5 to-purple-500/5 border-b border-border hover:from-primary/10 hover:to-purple-500/10 transition-colors">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <Settings2 className="w-5 h-5 text-primary" />
+                  </div>
+                  <div className="text-left">
+                    <h2 className="text-lg font-semibold text-foreground">
+                      Configuration Options
+                    </h2>
+                    <p className="text-sm text-muted-foreground">
+                      Customize how markdown is processed
+                    </p>
+                  </div>
+                </div>
+                <ChevronDown 
+                  className={`w-5 h-5 text-muted-foreground transition-transform ${
+                    optionsOpen ? 'rotate-180' : ''
+                  }`} 
+                />
+              </div>
+            </CollapsibleTrigger>
+            
+            <CollapsibleContent>
+              <div className="p-6 space-y-6">
+                {/* Action Buttons */}
+                <div className="flex flex-wrap gap-3">
+                  <button
+                    onClick={handleCopyCode}
+                    className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-opacity font-medium text-sm"
+                  >
+                    {codeCopied ? (
+                      <>
+                        <Check className="w-4 h-4" />
+                        Copied!
+                      </>
+                    ) : (
+                      <>
+                        <Code2 className="w-4 h-4" />
+                        Copy Code
+                      </>
+                    )}
+                  </button>
+                  <button
+                    onClick={handleResetOptions}
+                    className="flex items-center gap-2 px-4 py-2 bg-muted text-foreground rounded-lg hover:bg-muted/80 transition-colors font-medium text-sm"
+                  >
+                    <RotateCcw className="w-4 h-4" />
+                    Reset to Defaults
+                  </button>
+                  <button
+                    onClick={() => setShowDiff(!showDiff)}
+                    className="flex items-center gap-2 px-4 py-2 bg-muted text-foreground rounded-lg hover:bg-muted/80 transition-colors font-medium text-sm"
+                  >
+                    {showDiff ? (
+                      <>
+                        <EyeOff className="w-4 h-4" />
+                        Hide Diff
+                      </>
+                    ) : (
+                      <>
+                        <Eye className="w-4 h-4" />
+                        Show Diff
+                      </>
+                    )}
+                  </button>
+                </div>
+
+                {/* List Processing Options */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
+                    <List className="w-4 h-4 text-primary" />
+                    <span>List Processing</span>
+                  </div>
+                  
+                  <div className="grid md:grid-cols-2 gap-4 pl-6">
+                    <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg border border-border">
+                      <div className="flex-1">
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Label htmlFor="stripListLeaders" className="cursor-help">
+                              Strip List Leaders
+                            </Label>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Remove list markers (*, -, +, numbers) from lists</p>
+                          </TooltipContent>
+                        </Tooltip>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Default: true
+                        </p>
+                      </div>
+                      <Switch
+                        id="stripListLeaders"
+                        checked={options.stripListLeaders}
+                        onCheckedChange={(checked) => 
+                          setOptions({ ...options, stripListLeaders: checked })
+                        }
+                      />
+                    </div>
+
+                    <div className="p-4 bg-muted/30 rounded-lg border border-border">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Label htmlFor="listUnicodeChar" className="cursor-help">
+                            List Unicode Char
+                          </Label>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Character to insert instead of list markers</p>
+                        </TooltipContent>
+                      </Tooltip>
+                      <Input
+                        id="listUnicodeChar"
+                        value={options.listUnicodeChar}
+                        onChange={(e) => 
+                          setOptions({ ...options, listUnicodeChar: e.target.value })
+                        }
+                        placeholder="e.g., '→ ' or '• '"
+                        className="mt-2"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Link Processing Options */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
+                    <Link className="w-4 h-4 text-primary" />
+                    <span>Link Processing</span>
+                  </div>
+                  
+                  <div className="grid md:grid-cols-2 gap-4 pl-6">
+                    <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg border border-border">
+                      <div className="flex-1">
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Label htmlFor="replaceLinksWithURL" className="cursor-help">
+                              Replace Links with URL
+                            </Label>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Show only the URL instead of link text</p>
+                          </TooltipContent>
+                        </Tooltip>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Default: false
+                        </p>
+                      </div>
+                      <Switch
+                        id="replaceLinksWithURL"
+                        checked={options.replaceLinksWithURL}
+                        onCheckedChange={(checked) => 
+                          setOptions({ ...options, replaceLinksWithURL: checked })
+                        }
+                      />
+                    </div>
+
+                    <div className="p-4 bg-muted/30 rounded-lg border border-border">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Label htmlFor="separateLinksAndTexts" className="cursor-help">
+                            Link Separator
+                          </Label>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Separator between link text and URL (e.g., ": ")</p>
+                        </TooltipContent>
+                      </Tooltip>
+                      <Input
+                        id="separateLinksAndTexts"
+                        value={options.separateLinksAndTexts}
+                        onChange={(e) => 
+                          setOptions({ ...options, separateLinksAndTexts: e.target.value })
+                        }
+                        placeholder="e.g., ': ' or ' - '"
+                        className="mt-2"
+                        disabled={options.replaceLinksWithURL}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Markdown Features */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
+                    <Hash className="w-4 h-4 text-primary" />
+                    <span>Markdown Features</span>
+                  </div>
+                  
+                  <div className="grid md:grid-cols-2 gap-4 pl-6">
+                    <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg border border-border">
+                      <div className="flex-1">
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Label htmlFor="gfm" className="cursor-help">
+                              GitHub Flavored Markdown
+                            </Label>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Support GFM features like strikethrough</p>
+                          </TooltipContent>
+                        </Tooltip>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Default: true
+                        </p>
+                      </div>
+                      <Switch
+                        id="gfm"
+                        checked={options.gfm}
+                        onCheckedChange={(checked) => 
+                          setOptions({ ...options, gfm: checked })
+                        }
+                      />
+                    </div>
+
+                    <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg border border-border">
+                      <div className="flex-1">
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Label htmlFor="abbr" className="cursor-help">
+                              Remove Abbreviations
+                            </Label>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Strip abbreviation definitions (*[ABBR]: ...)</p>
+                          </TooltipContent>
+                        </Tooltip>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Default: false
+                        </p>
+                      </div>
+                      <Switch
+                        id="abbr"
+                        checked={options.abbr}
+                        onCheckedChange={(checked) => 
+                          setOptions({ ...options, abbr: checked })
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Image & HTML Options */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
+                    <Image className="w-4 h-4 text-primary" />
+                    <span>Image & HTML Options</span>
+                  </div>
+                  
+                  <div className="grid md:grid-cols-2 gap-4 pl-6">
+                    <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg border border-border">
+                      <div className="flex-1">
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Label htmlFor="useImgAltText" className="cursor-help">
+                              Use Image Alt Text
+                            </Label>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Replace images with their alt text</p>
+                          </TooltipContent>
+                        </Tooltip>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Default: true
+                        </p>
+                      </div>
+                      <Switch
+                        id="useImgAltText"
+                        checked={options.useImgAltText}
+                        onCheckedChange={(checked) => 
+                          setOptions({ ...options, useImgAltText: checked })
+                        }
+                      />
+                    </div>
+
+                    <div className="p-4 bg-muted/30 rounded-lg border border-border">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Label htmlFor="htmlTagsToSkip" className="cursor-help">
+                            HTML Tags to Skip
+                          </Label>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Comma-separated list of HTML tags to skip (e.g., a, b, img)</p>
+                        </TooltipContent>
+                      </Tooltip>
+                      <Input
+                        id="htmlTagsToSkip"
+                        value={htmlTagsInput}
+                        onChange={(e) => handleHtmlTagsChange(e.target.value)}
+                        placeholder="e.g., a, b, img"
+                        className="mt-2"
+                      />
+                      {options.htmlTagsToSkip.length > 0 && (
+                        <div className="flex flex-wrap gap-2 mt-2">
+                          {options.htmlTagsToSkip.map((tag) => (
+                            <Badge key={tag} variant="secondary">
+                              {tag}
+                            </Badge>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CollapsibleContent>
+          </div>
+        </Collapsible>
+
         {/* Editor Grid */}
         <div className="grid lg:grid-cols-2 gap-6">
           {/* Input Panel */}
           <div className="bg-white rounded-2xl shadow-xl border border-border overflow-hidden">
             <div className="bg-gradient-to-r from-primary/5 to-purple-500/5 border-b border-border px-6 py-4">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-red-400"></div>
-                <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
-                <div className="w-3 h-3 rounded-full bg-green-400"></div>
-                <span className="ml-3 text-sm font-medium text-foreground">
-                  input.md
-                </span>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-red-400"></div>
+                  <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
+                  <div className="w-3 h-3 rounded-full bg-green-400"></div>
+                  <span className="ml-3 text-sm font-medium text-foreground">
+                    input.md
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setShowPreview(false)}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
+                      !showPreview
+                        ? 'bg-primary text-primary-foreground'
+                        : 'text-muted-foreground hover:bg-muted/50'
+                    }`}
+                  >
+                    <Edit className="w-3.5 h-3.5" />
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => setShowPreview(true)}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
+                      showPreview
+                        ? 'bg-primary text-primary-foreground'
+                        : 'text-muted-foreground hover:bg-muted/50'
+                    }`}
+                  >
+                    <FileCode className="w-3.5 h-3.5" />
+                    Preview
+                  </button>
+                </div>
               </div>
             </div>
             <div className="p-6">
               <label className="block text-sm font-medium text-foreground mb-3">
-                Markdown Input
+                {showPreview ? 'Markdown Preview' : 'Markdown Input'}
               </label>
-              <textarea
-                value={markdown}
-                onChange={(e) => setMarkdown(e.target.value)}
-                className="w-full h-[500px] p-4 bg-muted/30 border border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent font-mono text-sm resize-none"
-                placeholder="Enter your markdown here..."
-              />
+              {!showPreview ? (
+                <textarea
+                  value={markdown}
+                  onChange={(e) => setMarkdown(e.target.value)}
+                  className="w-full h-[500px] p-4 bg-muted/30 border border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent font-mono text-sm resize-none"
+                  placeholder="Enter your markdown here..."
+                />
+              ) : (
+                <div className="w-full h-[500px] p-4 bg-muted/30 border border-input rounded-xl overflow-auto prose prose-sm max-w-none dark:prose-invert">
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    {markdown}
+                  </ReactMarkdown>
+                </div>
+              )}
             </div>
           </div>
 
@@ -131,7 +730,7 @@ export default function Index() {
                   <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
                   <div className="w-3 h-3 rounded-full bg-green-400"></div>
                   <span className="ml-3 text-sm font-medium text-foreground">
-                    output.txt
+                    {showDiff ? 'diff.txt' : 'output.txt'}
                   </span>
                 </div>
                 <button
@@ -154,13 +753,19 @@ export default function Index() {
             </div>
             <div className="p-6">
               <label className="block text-sm font-medium text-foreground mb-3">
-                Plain Text Output
+                {showDiff ? 'Diff View' : 'Plain Text Output'}
               </label>
-              <div className="w-full h-[500px] p-4 bg-muted/30 border border-input rounded-xl font-mono text-sm overflow-auto whitespace-pre-wrap">
-                {plainText || (
-                  <span className="text-muted-foreground italic">
-                    Output will appear here...
-                  </span>
+              <div className="w-full h-[500px] p-4 bg-muted/30 border border-input rounded-xl overflow-auto">
+                {showDiff ? (
+                  renderDiffView()
+                ) : (
+                  <div className="font-mono text-sm whitespace-pre-wrap">
+                    {plainText || (
+                      <span className="text-muted-foreground italic">
+                        Output will appear here...
+                      </span>
+                    )}
+                  </div>
                 )}
               </div>
             </div>
