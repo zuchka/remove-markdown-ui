@@ -9,7 +9,15 @@ export interface DemoResponse {
 // Share functionality types
 export interface SharePayload {
   markdown: string;
-  options: Record<string, any>;
+  // Legacy support for old single-library format
+  options?: Record<string, any>;
+  // New multi-library support
+  selectedLibraries?: string[];
+  libraryOptions?: Record<string, Record<string, any>>;
+  metadata?: {
+    title?: string;
+    description?: string;
+  };
 }
 
 export interface ShareResponse {
