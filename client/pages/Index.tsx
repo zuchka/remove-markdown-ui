@@ -373,286 +373,232 @@ export default function Index() {
             </CollapsibleTrigger>
             
             <CollapsibleContent>
-              <div className="p-6 space-y-6">
+              <div className="p-4 space-y-3">
                 {/* Action Buttons */}
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-wrap gap-2">
                   <button
                     onClick={handleCopyCode}
-                    className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-opacity font-medium text-sm"
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-primary text-primary-foreground rounded-md hover:opacity-90 transition-opacity text-xs font-medium"
                   >
                     {codeCopied ? (
                       <>
-                        <Check className="w-4 h-4" />
+                        <Check className="w-3 h-3" />
                         Copied!
                       </>
                     ) : (
                       <>
-                        <Code2 className="w-4 h-4" />
+                        <Code2 className="w-3 h-3" />
                         Copy Code
                       </>
                     )}
                   </button>
                   <button
                     onClick={handleResetOptions}
-                    className="flex items-center gap-2 px-4 py-2 bg-muted text-foreground rounded-lg hover:bg-muted/80 transition-colors font-medium text-sm"
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-muted text-foreground rounded-md hover:bg-muted/80 transition-colors text-xs font-medium"
                   >
-                    <RotateCcw className="w-4 h-4" />
-                    Reset to Defaults
+                    <RotateCcw className="w-3 h-3" />
+                    Reset
                   </button>
                   <button
                     onClick={() => setShowDiff(!showDiff)}
-                    className="flex items-center gap-2 px-4 py-2 bg-muted text-foreground rounded-lg hover:bg-muted/80 transition-colors font-medium text-sm"
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-muted text-foreground rounded-md hover:bg-muted/80 transition-colors text-xs font-medium"
                   >
                     {showDiff ? (
                       <>
-                        <EyeOff className="w-4 h-4" />
+                        <EyeOff className="w-3 h-3" />
                         Hide Diff
                       </>
                     ) : (
                       <>
-                        <Eye className="w-4 h-4" />
-                        Show Diff
+                        <Eye className="w-3 h-3" />
+                        Diff
                       </>
                     )}
                   </button>
                 </div>
 
-                {/* List Processing Options */}
-                <div className="space-y-4">
-                  <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
-                    <List className="w-4 h-4 text-primary" />
-                    <span>List Processing</span>
+                {/* All Options in Compact Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+                  {/* Strip List Leaders */}
+                  <div className="flex items-center justify-between px-3 py-2 bg-muted/30 rounded-md border border-border">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Label htmlFor="stripListLeaders" className="cursor-help text-xs font-medium">
+                          Strip List Leaders
+                        </Label>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Remove list markers (*, -, +, numbers)</p>
+                      </TooltipContent>
+                    </Tooltip>
+                    <Switch
+                      id="stripListLeaders"
+                      checked={options.stripListLeaders}
+                      onCheckedChange={(checked) =>
+                        setOptions({ ...options, stripListLeaders: checked })
+                      }
+                    />
                   </div>
-                  
-                  <div className="grid md:grid-cols-2 gap-4 pl-6">
-                    <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg border border-border">
-                      <div className="flex-1">
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Label htmlFor="stripListLeaders" className="cursor-help">
-                              Strip List Leaders
-                            </Label>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>Remove list markers (*, -, +, numbers) from lists</p>
-                          </TooltipContent>
-                        </Tooltip>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          Default: true
-                        </p>
+
+                  {/* GFM */}
+                  <div className="flex items-center justify-between px-3 py-2 bg-muted/30 rounded-md border border-border">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Label htmlFor="gfm" className="cursor-help text-xs font-medium">
+                          GFM Support
+                        </Label>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>GitHub Flavored Markdown (strikethrough, tables)</p>
+                      </TooltipContent>
+                    </Tooltip>
+                    <Switch
+                      id="gfm"
+                      checked={options.gfm}
+                      onCheckedChange={(checked) =>
+                        setOptions({ ...options, gfm: checked })
+                      }
+                    />
+                  </div>
+
+                  {/* Use Image Alt Text */}
+                  <div className="flex items-center justify-between px-3 py-2 bg-muted/30 rounded-md border border-border">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Label htmlFor="useImgAltText" className="cursor-help text-xs font-medium">
+                          Use Image Alt Text
+                        </Label>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Replace images with their alt text</p>
+                      </TooltipContent>
+                    </Tooltip>
+                    <Switch
+                      id="useImgAltText"
+                      checked={options.useImgAltText}
+                      onCheckedChange={(checked) =>
+                        setOptions({ ...options, useImgAltText: checked })
+                      }
+                    />
+                  </div>
+
+                  {/* Remove Abbreviations */}
+                  <div className="flex items-center justify-between px-3 py-2 bg-muted/30 rounded-md border border-border">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Label htmlFor="abbr" className="cursor-help text-xs font-medium">
+                          Remove Abbreviations
+                        </Label>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Strip abbreviation definitions (*[ABBR]: ...)</p>
+                      </TooltipContent>
+                    </Tooltip>
+                    <Switch
+                      id="abbr"
+                      checked={options.abbr}
+                      onCheckedChange={(checked) =>
+                        setOptions({ ...options, abbr: checked })
+                      }
+                    />
+                  </div>
+
+                  {/* Replace Links with URL */}
+                  <div className="flex items-center justify-between px-3 py-2 bg-muted/30 rounded-md border border-border">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Label htmlFor="replaceLinksWithURL" className="cursor-help text-xs font-medium">
+                          Replace Links with URL
+                        </Label>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Show only the URL instead of link text</p>
+                      </TooltipContent>
+                    </Tooltip>
+                    <Switch
+                      id="replaceLinksWithURL"
+                      checked={options.replaceLinksWithURL}
+                      onCheckedChange={(checked) =>
+                        setOptions({ ...options, replaceLinksWithURL: checked })
+                      }
+                    />
+                  </div>
+
+                  {/* List Unicode Char */}
+                  <div className="px-3 py-2 bg-muted/30 rounded-md border border-border">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Label htmlFor="listUnicodeChar" className="cursor-help text-xs font-medium block mb-1">
+                          List Unicode Char
+                        </Label>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Character to insert instead of list markers</p>
+                      </TooltipContent>
+                    </Tooltip>
+                    <Input
+                      id="listUnicodeChar"
+                      value={options.listUnicodeChar}
+                      onChange={(e) =>
+                        setOptions({ ...options, listUnicodeChar: e.target.value })
+                      }
+                      placeholder="→ or •"
+                      className="h-7 text-xs"
+                    />
+                  </div>
+
+                  {/* Link Separator */}
+                  <div className="px-3 py-2 bg-muted/30 rounded-md border border-border">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Label htmlFor="separateLinksAndTexts" className="cursor-help text-xs font-medium block mb-1">
+                          Link Separator
+                        </Label>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Separator between link text and URL</p>
+                      </TooltipContent>
+                    </Tooltip>
+                    <Input
+                      id="separateLinksAndTexts"
+                      value={options.separateLinksAndTexts}
+                      onChange={(e) =>
+                        setOptions({ ...options, separateLinksAndTexts: e.target.value })
+                      }
+                      placeholder=": or -"
+                      className="h-7 text-xs"
+                      disabled={options.replaceLinksWithURL}
+                    />
+                  </div>
+
+                  {/* HTML Tags to Skip */}
+                  <div className="px-3 py-2 bg-muted/30 rounded-md border border-border md:col-span-2">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Label htmlFor="htmlTagsToSkip" className="cursor-help text-xs font-medium block mb-1">
+                          HTML Tags to Skip
+                        </Label>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Comma-separated tags (e.g., a, b, img)</p>
+                      </TooltipContent>
+                    </Tooltip>
+                    <Input
+                      id="htmlTagsToSkip"
+                      value={htmlTagsInput}
+                      onChange={(e) => handleHtmlTagsChange(e.target.value)}
+                      placeholder="e.g., a, b, img"
+                      className="h-7 text-xs"
+                    />
+                    {options.htmlTagsToSkip.length > 0 && (
+                      <div className="flex flex-wrap gap-1 mt-1.5">
+                        {options.htmlTagsToSkip.map((tag) => (
+                          <Badge key={tag} variant="secondary" className="text-xs py-0 px-1.5">
+                            {tag}
+                          </Badge>
+                        ))}
                       </div>
-                      <Switch
-                        id="stripListLeaders"
-                        checked={options.stripListLeaders}
-                        onCheckedChange={(checked) => 
-                          setOptions({ ...options, stripListLeaders: checked })
-                        }
-                      />
-                    </div>
-
-                    <div className="p-4 bg-muted/30 rounded-lg border border-border">
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Label htmlFor="listUnicodeChar" className="cursor-help">
-                            List Unicode Char
-                          </Label>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Character to insert instead of list markers</p>
-                        </TooltipContent>
-                      </Tooltip>
-                      <Input
-                        id="listUnicodeChar"
-                        value={options.listUnicodeChar}
-                        onChange={(e) => 
-                          setOptions({ ...options, listUnicodeChar: e.target.value })
-                        }
-                        placeholder="e.g., '→ ' or '• '"
-                        className="mt-2"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Link Processing Options */}
-                <div className="space-y-4">
-                  <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
-                    <Link className="w-4 h-4 text-primary" />
-                    <span>Link Processing</span>
-                  </div>
-                  
-                  <div className="grid md:grid-cols-2 gap-4 pl-6">
-                    <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg border border-border">
-                      <div className="flex-1">
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Label htmlFor="replaceLinksWithURL" className="cursor-help">
-                              Replace Links with URL
-                            </Label>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>Show only the URL instead of link text</p>
-                          </TooltipContent>
-                        </Tooltip>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          Default: false
-                        </p>
-                      </div>
-                      <Switch
-                        id="replaceLinksWithURL"
-                        checked={options.replaceLinksWithURL}
-                        onCheckedChange={(checked) => 
-                          setOptions({ ...options, replaceLinksWithURL: checked })
-                        }
-                      />
-                    </div>
-
-                    <div className="p-4 bg-muted/30 rounded-lg border border-border">
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Label htmlFor="separateLinksAndTexts" className="cursor-help">
-                            Link Separator
-                          </Label>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Separator between link text and URL (e.g., ": ")</p>
-                        </TooltipContent>
-                      </Tooltip>
-                      <Input
-                        id="separateLinksAndTexts"
-                        value={options.separateLinksAndTexts}
-                        onChange={(e) => 
-                          setOptions({ ...options, separateLinksAndTexts: e.target.value })
-                        }
-                        placeholder="e.g., ': ' or ' - '"
-                        className="mt-2"
-                        disabled={options.replaceLinksWithURL}
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Markdown Features */}
-                <div className="space-y-4">
-                  <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
-                    <Hash className="w-4 h-4 text-primary" />
-                    <span>Markdown Features</span>
-                  </div>
-                  
-                  <div className="grid md:grid-cols-2 gap-4 pl-6">
-                    <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg border border-border">
-                      <div className="flex-1">
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Label htmlFor="gfm" className="cursor-help">
-                              GitHub Flavored Markdown
-                            </Label>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>Support GFM features like strikethrough</p>
-                          </TooltipContent>
-                        </Tooltip>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          Default: true
-                        </p>
-                      </div>
-                      <Switch
-                        id="gfm"
-                        checked={options.gfm}
-                        onCheckedChange={(checked) => 
-                          setOptions({ ...options, gfm: checked })
-                        }
-                      />
-                    </div>
-
-                    <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg border border-border">
-                      <div className="flex-1">
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Label htmlFor="abbr" className="cursor-help">
-                              Remove Abbreviations
-                            </Label>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>Strip abbreviation definitions (*[ABBR]: ...)</p>
-                          </TooltipContent>
-                        </Tooltip>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          Default: false
-                        </p>
-                      </div>
-                      <Switch
-                        id="abbr"
-                        checked={options.abbr}
-                        onCheckedChange={(checked) => 
-                          setOptions({ ...options, abbr: checked })
-                        }
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Image & HTML Options */}
-                <div className="space-y-4">
-                  <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
-                    <Image className="w-4 h-4 text-primary" />
-                    <span>Image & HTML Options</span>
-                  </div>
-                  
-                  <div className="grid md:grid-cols-2 gap-4 pl-6">
-                    <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg border border-border">
-                      <div className="flex-1">
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Label htmlFor="useImgAltText" className="cursor-help">
-                              Use Image Alt Text
-                            </Label>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>Replace images with their alt text</p>
-                          </TooltipContent>
-                        </Tooltip>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          Default: true
-                        </p>
-                      </div>
-                      <Switch
-                        id="useImgAltText"
-                        checked={options.useImgAltText}
-                        onCheckedChange={(checked) => 
-                          setOptions({ ...options, useImgAltText: checked })
-                        }
-                      />
-                    </div>
-
-                    <div className="p-4 bg-muted/30 rounded-lg border border-border">
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Label htmlFor="htmlTagsToSkip" className="cursor-help">
-                            HTML Tags to Skip
-                          </Label>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Comma-separated list of HTML tags to skip (e.g., a, b, img)</p>
-                        </TooltipContent>
-                      </Tooltip>
-                      <Input
-                        id="htmlTagsToSkip"
-                        value={htmlTagsInput}
-                        onChange={(e) => handleHtmlTagsChange(e.target.value)}
-                        placeholder="e.g., a, b, img"
-                        className="mt-2"
-                      />
-                      {options.htmlTagsToSkip.length > 0 && (
-                        <div className="flex flex-wrap gap-2 mt-2">
-                          {options.htmlTagsToSkip.map((tag) => (
-                            <Badge key={tag} variant="secondary">
-                              {tag}
-                            </Badge>
-                          ))}
-                        </div>
-                      )}
-                    </div>
+                    )}
                   </div>
                 </div>
               </div>
