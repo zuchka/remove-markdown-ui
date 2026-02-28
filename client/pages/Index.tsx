@@ -362,11 +362,11 @@ export default function Index() {
             <div key={i} className="font-mono text-sm">
               {changed ? (
                 <div className="space-y-0.5">
-                  <div className="text-red-600 bg-red-50 px-2 py-0.5 rounded">
+                  <div className="text-red-600 bg-red-50 dark:bg-red-950 px-2 py-0.5 rounded border-2 border-black">
                     <span className="text-red-400 mr-2">-</span>
                     {line}
                   </div>
-                  <div className="text-green-600 bg-green-50 px-2 py-0.5 rounded">
+                  <div className="text-green-600 bg-green-50 dark:bg-green-950 px-2 py-0.5 rounded border-2 border-black">
                     <span className="text-green-400 mr-2">+</span>
                     {output}
                   </div>
@@ -385,27 +385,27 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50/30 to-blue-50/20">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b border-border bg-white/50 backdrop-blur-sm sticky top-0 z-10">
+      <header className="border-b-4 border-black bg-white shadow-[0_4px_0px_0px_black] sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center shadow-lg shadow-primary/20">
+              <div className="w-12 h-12 rounded-md bg-primary border-3 border-black shadow-[4px_4px_0px_0px_black] flex items-center justify-center">
                 <FileText className="w-6 h-6 text-white" />
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-foreground">
                   Remove Markdown
                 </h1>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-muted-foreground font-medium">
                   Official website for the remove-markdown library
                 </p>
               </div>
             </div>
             <a
               href="#get-started"
-              className="px-4 py-2 text-sm font-medium text-primary hover:text-primary/80 hover:bg-primary/5 rounded-lg transition-colors"
+              className="px-4 py-2 text-sm font-semibold text-foreground bg-white border-3 border-black rounded-md shadow-[4px_4px_0px_0px_black] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_black] transition-all"
             >
               Get Started
             </a>
@@ -416,15 +416,15 @@ export default function Index() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Info Banner */}
-        <div className="mb-8 bg-gradient-to-r from-primary/10 via-purple-500/10 to-blue-500/10 border border-primary/20 rounded-2xl p-6">
+        <div className="mb-8 neo-bg-yellow border-4 border-black rounded-md p-6 shadow-[8px_8px_0px_0px_black]">
           <div className="flex items-center gap-4">
-            <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-              <Sparkles className="w-5 h-5 text-primary" />
+            <div className="w-10 h-10 rounded-md bg-white border-3 border-black flex items-center justify-center flex-shrink-0">
+              <Sparkles className="w-5 h-5 text-black" />
             </div>
             <div>
-              <p className="text-muted-foreground">
+              <p className="text-foreground font-medium">
                 This is a live demo of{" "}
-                <code className="px-2 py-0.5 bg-muted rounded text-sm font-mono text-primary">
+                <code className="px-2 py-0.5 bg-white border-2 border-black rounded text-sm font-mono font-bold">
                   remove-markdown
                 </code>
                 , one of the oldest and most trusted markdown parsers in
@@ -436,24 +436,24 @@ export default function Index() {
 
         {/* Options Panel */}
         <Collapsible open={optionsOpen} onOpenChange={setOptionsOpen} className="mb-6">
-          <div className="bg-white rounded-2xl shadow-xl border border-border overflow-hidden">
-            <CollapsibleTrigger className="w-full px-6 py-4 bg-gradient-to-r from-primary/5 to-purple-500/5 border-b border-border hover:from-primary/10 hover:to-purple-500/10 transition-colors">
+          <div className="bg-white rounded-md border-4 border-black shadow-[8px_8px_0px_0px_black] overflow-hidden">
+            <CollapsibleTrigger className="w-full px-6 py-4 bg-primary border-b-4 border-black hover:bg-primary/90 transition-colors">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <Settings2 className="w-5 h-5 text-primary" />
+                  <div className="w-10 h-10 rounded-md bg-white border-3 border-black flex items-center justify-center">
+                    <Settings2 className="w-5 h-5 text-black" />
                   </div>
                   <div className="text-left">
-                    <h2 className="text-lg font-semibold text-foreground">
+                    <h2 className="text-lg font-bold text-white">
                       Configuration Options
                     </h2>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-white/90 font-medium">
                       Customize how markdown is processed
                     </p>
                   </div>
                 </div>
                 <ChevronDown 
-                  className={`w-5 h-5 text-muted-foreground transition-transform ${
+                  className={`w-5 h-5 text-white transition-transform ${
                     optionsOpen ? 'rotate-180' : ''
                   }`} 
                 />
@@ -466,7 +466,7 @@ export default function Index() {
                 <div className="flex flex-wrap gap-2">
                   <button
                     onClick={handleCopyCode}
-                    className="flex items-center gap-1.5 px-3 py-1.5 bg-primary text-primary-foreground rounded-md hover:opacity-90 transition-opacity text-xs font-medium"
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-primary text-primary-foreground border-3 border-black rounded-md shadow-[4px_4px_0px_0px_black] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_black] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all text-xs font-semibold"
                   >
                     {codeCopied ? (
                       <>
@@ -482,14 +482,14 @@ export default function Index() {
                   </button>
                   <button
                     onClick={handleResetOptions}
-                    className="flex items-center gap-1.5 px-3 py-1.5 bg-muted text-foreground rounded-md hover:bg-muted/80 transition-colors text-xs font-medium"
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-white text-foreground border-3 border-black rounded-md shadow-[4px_4px_0px_0px_black] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_black] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all text-xs font-semibold"
                   >
                     <RotateCcw className="w-3 h-3" />
                     Reset
                   </button>
                   <button
                     onClick={() => setShowDiff(!showDiff)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 bg-muted text-foreground rounded-md hover:bg-muted/80 transition-colors text-xs font-medium"
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-white text-foreground border-3 border-black rounded-md shadow-[4px_4px_0px_0px_black] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_black] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all text-xs font-semibold"
                   >
                     {showDiff ? (
                       <>
@@ -508,10 +508,10 @@ export default function Index() {
                 {/* All Options in Compact Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
                   {/* Strip List Leaders */}
-                  <div className="flex items-center justify-between px-3 py-2 bg-muted/30 rounded-md border border-border">
+                  <div className="flex items-center justify-between px-3 py-2 bg-white rounded-md border-3 border-black">
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <Label htmlFor="stripListLeaders" className="cursor-help text-xs font-medium">
+                        <Label htmlFor="stripListLeaders" className="cursor-help text-xs">
                           Strip List Leaders
                         </Label>
                       </TooltipTrigger>
@@ -529,10 +529,10 @@ export default function Index() {
                   </div>
 
                   {/* GFM */}
-                  <div className="flex items-center justify-between px-3 py-2 bg-muted/30 rounded-md border border-border">
+                  <div className="flex items-center justify-between px-3 py-2 bg-white rounded-md border-3 border-black">
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <Label htmlFor="gfm" className="cursor-help text-xs font-medium">
+                        <Label htmlFor="gfm" className="cursor-help text-xs">
                           GFM Support
                         </Label>
                       </TooltipTrigger>
@@ -550,10 +550,10 @@ export default function Index() {
                   </div>
 
                   {/* Use Image Alt Text */}
-                  <div className="flex items-center justify-between px-3 py-2 bg-muted/30 rounded-md border border-border">
+                  <div className="flex items-center justify-between px-3 py-2 bg-white rounded-md border-3 border-black">
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <Label htmlFor="useImgAltText" className="cursor-help text-xs font-medium">
+                        <Label htmlFor="useImgAltText" className="cursor-help text-xs">
                           Use Image Alt Text
                         </Label>
                       </TooltipTrigger>
@@ -571,10 +571,10 @@ export default function Index() {
                   </div>
 
                   {/* Remove Abbreviations */}
-                  <div className="flex items-center justify-between px-3 py-2 bg-muted/30 rounded-md border border-border">
+                  <div className="flex items-center justify-between px-3 py-2 bg-white rounded-md border-3 border-black">
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <Label htmlFor="abbr" className="cursor-help text-xs font-medium">
+                        <Label htmlFor="abbr" className="cursor-help text-xs">
                           Remove Abbreviations
                         </Label>
                       </TooltipTrigger>
@@ -592,10 +592,10 @@ export default function Index() {
                   </div>
 
                   {/* Replace Links with URL */}
-                  <div className="flex items-center justify-between px-3 py-2 bg-muted/30 rounded-md border border-border">
+                  <div className="flex items-center justify-between px-3 py-2 bg-white rounded-md border-3 border-black">
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <Label htmlFor="replaceLinksWithURL" className="cursor-help text-xs font-medium">
+                        <Label htmlFor="replaceLinksWithURL" className="cursor-help text-xs">
                           Replace Links with URL
                         </Label>
                       </TooltipTrigger>
@@ -613,10 +613,10 @@ export default function Index() {
                   </div>
 
                   {/* List Unicode Char */}
-                  <div className="px-3 py-2 bg-muted/30 rounded-md border border-border">
+                  <div className="px-3 py-2 bg-white rounded-md border-3 border-black">
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <Label htmlFor="listUnicodeChar" className="cursor-help text-xs font-medium block mb-1">
+                        <Label htmlFor="listUnicodeChar" className="cursor-help text-xs block mb-1">
                           List Unicode Char
                         </Label>
                       </TooltipTrigger>
@@ -636,10 +636,10 @@ export default function Index() {
                   </div>
 
                   {/* Link Separator */}
-                  <div className="px-3 py-2 bg-muted/30 rounded-md border border-border">
+                  <div className="px-3 py-2 bg-white rounded-md border-3 border-black">
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <Label htmlFor="separateLinksAndTexts" className="cursor-help text-xs font-medium block mb-1">
+                        <Label htmlFor="separateLinksAndTexts" className="cursor-help text-xs block mb-1">
                           Link Separator
                         </Label>
                       </TooltipTrigger>
@@ -660,10 +660,10 @@ export default function Index() {
                   </div>
 
                   {/* HTML Tags to Skip */}
-                  <div className="px-3 py-2 bg-muted/30 rounded-md border border-border md:col-span-2">
+                  <div className="px-3 py-2 bg-white rounded-md border-3 border-black md:col-span-2">
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <Label htmlFor="htmlTagsToSkip" className="cursor-help text-xs font-medium block mb-1">
+                        <Label htmlFor="htmlTagsToSkip" className="cursor-help text-xs block mb-1">
                           HTML Tags to Skip
                         </Label>
                       </TooltipTrigger>
@@ -697,24 +697,24 @@ export default function Index() {
         {/* Editor Grid */}
         <div className="grid lg:grid-cols-2 gap-6">
           {/* Input Panel */}
-          <div className="bg-white rounded-2xl shadow-xl border border-border overflow-hidden">
-            <div className="bg-gradient-to-r from-primary/5 to-purple-500/5 border-b border-border px-6 py-4">
+          <div className="bg-white rounded-md border-4 border-black shadow-[8px_8px_0px_0px_black] overflow-hidden">
+            <div className="bg-muted border-b-4 border-black px-6 py-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-red-400"></div>
-                  <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
-                  <div className="w-3 h-3 rounded-full bg-green-400"></div>
-                  <span className="ml-3 text-sm font-medium text-foreground">
+                  <div className="w-3 h-3 rounded-full bg-destructive border-2 border-black"></div>
+                  <div className="w-3 h-3 rounded-full bg-accent border-2 border-black"></div>
+                  <div className="w-3 h-3 rounded-full neo-bg-green border-2 border-black"></div>
+                  <span className="ml-3 text-sm font-bold text-foreground">
                     input.md
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setShowPreview(false)}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
+                    className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md border-3 border-black transition-all ${
                       !showPreview
-                        ? 'bg-primary text-primary-foreground'
-                        : 'text-muted-foreground hover:bg-muted/50'
+                        ? 'bg-primary text-primary-foreground shadow-[2px_2px_0px_0px_black]'
+                        : 'bg-white text-foreground hover:shadow-[2px_2px_0px_0px_black]'
                     }`}
                   >
                     <Edit className="w-3.5 h-3.5" />
@@ -722,10 +722,10 @@ export default function Index() {
                   </button>
                   <button
                     onClick={() => setShowPreview(true)}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
+                    className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md border-3 border-black transition-all ${
                       showPreview
-                        ? 'bg-primary text-primary-foreground'
-                        : 'text-muted-foreground hover:bg-muted/50'
+                        ? 'bg-primary text-primary-foreground shadow-[2px_2px_0px_0px_black]'
+                        : 'bg-white text-foreground hover:shadow-[2px_2px_0px_0px_black]'
                     }`}
                   >
                     <FileCode className="w-3.5 h-3.5" />
@@ -735,18 +735,18 @@ export default function Index() {
               </div>
             </div>
             <div className="p-6">
-              <label className="block text-sm font-medium text-foreground mb-3">
+              <label className="block text-sm font-bold text-foreground mb-3">
                 {showPreview ? 'Markdown Preview' : 'Markdown Input'}
               </label>
               {!showPreview ? (
                 <textarea
                   value={markdown}
                   onChange={(e) => setMarkdown(e.target.value)}
-                  className="w-full h-[500px] p-4 bg-muted/30 border border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent font-mono text-sm resize-none"
+                  className="w-full h-[500px] p-4 bg-white border-3 border-black rounded-md focus:outline-none focus:shadow-[4px_4px_0px_0px_black] font-mono text-sm resize-none transition-shadow"
                   placeholder="Enter your markdown here..."
                 />
               ) : (
-                <div className="w-full h-[500px] p-4 bg-muted/30 border border-input rounded-xl overflow-auto prose prose-sm max-w-none dark:prose-invert">
+                <div className="w-full h-[500px] p-4 bg-white border-3 border-black rounded-md overflow-auto prose prose-sm max-w-none dark:prose-invert">
                   <ReactMarkdown remarkPlugins={[remarkGfm]}>
                     {markdown}
                   </ReactMarkdown>
@@ -756,14 +756,14 @@ export default function Index() {
           </div>
 
           {/* Output Panel */}
-          <div className="bg-white rounded-2xl shadow-xl border border-border overflow-hidden">
-            <div className="bg-gradient-to-r from-primary/5 to-purple-500/5 border-b border-border px-6 py-4">
+          <div className="bg-white rounded-md border-4 border-black shadow-[8px_8px_0px_0px_black] overflow-hidden">
+            <div className="bg-muted border-b-4 border-black px-6 py-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-red-400"></div>
-                  <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
-                  <div className="w-3 h-3 rounded-full bg-green-400"></div>
-                  <span className="ml-3 text-sm font-medium text-foreground">
+                  <div className="w-3 h-3 rounded-full bg-destructive border-2 border-black"></div>
+                  <div className="w-3 h-3 rounded-full bg-accent border-2 border-black"></div>
+                  <div className="w-3 h-3 rounded-full neo-bg-green border-2 border-black"></div>
+                  <span className="ml-3 text-sm font-bold text-foreground">
                     {showDiff ? 'diff.txt' : 'output.txt'}
                   </span>
                 </div>
@@ -771,11 +771,11 @@ export default function Index() {
                   <button
                     onClick={handleShare}
                     disabled={isSharing}
-                    className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-primary hover:bg-primary/10 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-foreground bg-white border-3 border-black rounded-md shadow-[4px_4px_0px_0px_black] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_black] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isSharing ? (
                       <>
-                        <div className="w-3.5 h-3.5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                        <div className="w-3.5 h-3.5 border-2 border-black border-t-transparent rounded-full animate-spin" />
                         Sharing...
                       </>
                     ) : (
@@ -787,7 +787,7 @@ export default function Index() {
                   </button>
                   <button
                     onClick={handleCopy}
-                    className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-primary hover:bg-primary/10 rounded-lg transition-colors"
+                    className="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-foreground bg-white border-3 border-black rounded-md shadow-[4px_4px_0px_0px_black] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_black] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all"
                   >
                     {copied ? (
                       <>
@@ -805,14 +805,14 @@ export default function Index() {
               </div>
             </div>
             <div className="p-6">
-              <label className="block text-sm font-medium text-foreground mb-3">
+              <label className="block text-sm font-bold text-foreground mb-3">
                 {showDiff ? 'Diff View' : 'Plain Text Output'}
               </label>
-              <div className="w-full h-[500px] p-4 bg-muted/30 border border-input rounded-xl overflow-auto">
+              <div className="w-full h-[500px] p-4 bg-white border-3 border-black rounded-md overflow-auto">
                 {showDiff ? (
                   renderDiffView()
                 ) : (
-                  <div className="font-mono text-sm whitespace-pre-wrap">
+                  <div className="font-mono text-sm whitespace-pre-wrap font-medium">
                     {plainText || (
                       <span className="text-muted-foreground italic">
                         Output will appear here...
@@ -827,10 +827,10 @@ export default function Index() {
 
         {/* Features Grid */}
         <div className="mt-12 grid md:grid-cols-3 gap-6">
-          <div className="bg-white rounded-xl p-6 border border-border shadow-sm">
-            <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+          <div className="bg-white rounded-md p-6 border-4 border-black shadow-[6px_6px_0px_0px_black]">
+            <div className="w-12 h-12 rounded-md bg-primary border-3 border-black flex items-center justify-center mb-4">
               <svg
-                className="w-6 h-6 text-primary"
+                className="w-6 h-6 text-white"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -843,19 +843,19 @@ export default function Index() {
                 />
               </svg>
             </div>
-            <h3 className="text-lg font-semibold text-foreground mb-2">
+            <h3 className="text-lg font-bold text-foreground mb-2">
               Lightning Fast
             </h3>
-            <p className="text-muted-foreground text-sm">
+            <p className="text-muted-foreground text-sm font-medium">
               Instantly strips markdown syntax with minimal overhead, perfect
               for real-time applications.
             </p>
           </div>
 
-          <div className="bg-white rounded-xl p-6 border border-border shadow-sm">
-            <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+          <div className="bg-white rounded-md p-6 border-4 border-black shadow-[6px_6px_0px_0px_black]">
+            <div className="w-12 h-12 rounded-md bg-primary border-3 border-black flex items-center justify-center mb-4">
               <svg
-                className="w-6 h-6 text-primary"
+                className="w-6 h-6 text-white"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -868,18 +868,18 @@ export default function Index() {
                 />
               </svg>
             </div>
-            <h3 className="text-lg font-semibold text-foreground mb-2">
+            <h3 className="text-lg font-bold text-foreground mb-2">
               Battle-Tested & Trusted
             </h3>
-            <p className="text-muted-foreground text-sm">
+            <p className="text-muted-foreground text-sm font-medium">
               Over 10 years old with 2M+ downloads on NPM per month.
             </p>
           </div>
 
-          <div className="bg-white rounded-xl p-6 border border-border shadow-sm">
-            <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+          <div className="bg-white rounded-md p-6 border-4 border-black shadow-[6px_6px_0px_0px_black]">
+            <div className="w-12 h-12 rounded-md bg-primary border-3 border-black flex items-center justify-center mb-4">
               <svg
-                className="w-6 h-6 text-primary"
+                className="w-6 h-6 text-white"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -892,10 +892,10 @@ export default function Index() {
                 />
               </svg>
             </div>
-            <h3 className="text-lg font-semibold text-foreground mb-2">
+            <h3 className="text-lg font-bold text-foreground mb-2">
               Simple API
             </h3>
-            <p className="text-muted-foreground text-sm">
+            <p className="text-muted-foreground text-sm font-medium">
               Clean, straightforward interface with zero configuration required.
               Just import and use.
             </p>
@@ -903,19 +903,18 @@ export default function Index() {
         </div>
 
         {/* Builder CTA Section */}
-        <div className="mt-16 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary via-purple-600 to-blue-600 opacity-5 blur-3xl"></div>
-          <div className="relative bg-gradient-to-br from-primary/10 via-purple-500/10 to-blue-500/10 rounded-3xl border-2 border-primary/20 p-8 md:p-12">
+        <div className="mt-16">
+          <div className="bg-primary rounded-md border-4 border-black p-8 md:p-12 shadow-[12px_12px_0px_0px_black]">
             <div className="max-w-3xl mx-auto text-center">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-purple-600 mb-6 shadow-lg shadow-primary/30">
-                <Zap className="w-8 h-8 text-white" />
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-md bg-white border-3 border-black mb-6 shadow-[4px_4px_0px_0px_black]">
+                <Zap className="w-8 h-8 text-black" />
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
                 Made with Builder
               </h2>
-              <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
+              <p className="text-lg text-white/95 mb-8 leading-relaxed font-medium">
                 This demo app was created in minutes using{" "}
-                <span className="font-semibold text-primary">Builder</span> —
+                <span className="font-bold">Builder</span> —
                 the AI-powered platform that turns your ideas into
                 production-ready code. No templates, no limitations, just pure
                 creativity.
@@ -925,7 +924,7 @@ export default function Index() {
                   href="https://www.builder.io?utm_source=tool&utm_content=ma"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary to-purple-600 text-white rounded-xl hover:shadow-lg hover:shadow-primary/30 transition-all font-semibold text-base group"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-white text-black border-3 border-black rounded-md shadow-[6px_6px_0px_0px_black] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[3px_3px_0px_0px_black] active:translate-x-[6px] active:translate-y-[6px] active:shadow-none transition-all font-bold text-base group"
                 >
                   Start Building for Free
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -934,15 +933,15 @@ export default function Index() {
                   href="https://www.builder.io/c/docs?utm_source=tool&utm_content=ma"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-white border-2 border-primary/20 text-foreground rounded-xl hover:border-primary/40 transition-colors font-medium text-base"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white border-3 border-black rounded-md shadow-[6px_6px_0px_0px_black] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[3px_3px_0px_0px_black] active:translate-x-[6px] active:translate-y-[6px] active:shadow-none transition-all font-bold text-base"
                 >
                   View Documentation
                 </a>
               </div>
-              <div className="mt-8 flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
+              <div className="mt-8 flex flex-wrap justify-center gap-6 text-sm text-white font-semibold">
                 <div className="flex items-center gap-2">
                   <svg
-                    className="w-5 h-5 text-primary"
+                    className="w-5 h-5"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -958,7 +957,7 @@ export default function Index() {
                 </div>
                 <div className="flex items-center gap-2">
                   <svg
-                    className="w-5 h-5 text-primary"
+                    className="w-5 h-5"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -974,7 +973,7 @@ export default function Index() {
                 </div>
                 <div className="flex items-center gap-2">
                   <svg
-                    className="w-5 h-5 text-primary"
+                    className="w-5 h-5"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -996,57 +995,57 @@ export default function Index() {
         {/* Installation */}
         <div
           id="get-started"
-          className="mt-12 bg-white rounded-2xl p-8 border border-border shadow-sm"
+          className="mt-12 bg-white rounded-md p-8 border-4 border-black shadow-[8px_8px_0px_0px_black]"
         >
-          <h2 className="text-xl font-semibold text-foreground mb-4">
+          <h2 className="text-xl font-bold text-foreground mb-4">
             Get Started
           </h2>
-          <p className="text-muted-foreground mb-4">
+          <p className="text-muted-foreground font-medium mb-4">
             Install the library via npm, yarn, or pnpm:
           </p>
           <div className="grid md:grid-cols-3 gap-4">
-            <div className="bg-muted/50 rounded-lg p-4 border border-border">
-              <code className="text-sm font-mono text-foreground">
+            <div className="bg-muted rounded-md p-4 border-3 border-black">
+              <code className="text-sm font-mono font-bold text-foreground">
                 npm install remove-markdown
               </code>
             </div>
-            <div className="bg-muted/50 rounded-lg p-4 border border-border">
-              <code className="text-sm font-mono text-foreground">
+            <div className="bg-muted rounded-md p-4 border-3 border-black">
+              <code className="text-sm font-mono font-bold text-foreground">
                 yarn add remove-markdown
               </code>
             </div>
-            <div className="bg-muted/50 rounded-lg p-4 border border-border">
-              <code className="text-sm font-mono text-foreground">
+            <div className="bg-muted rounded-md p-4 border-3 border-black">
+              <code className="text-sm font-mono font-bold text-foreground">
                 pnpm add remove-markdown
               </code>
             </div>
           </div>
-          <div className="mt-6 bg-gradient-to-r from-primary/5 to-purple-500/5 rounded-lg p-4 border border-primary/20">
-            <p className="text-sm font-mono text-foreground">
+          <div className="mt-6 bg-muted rounded-md p-4 border-3 border-black">
+            <p className="text-sm font-mono font-medium text-foreground">
               <span className="text-muted-foreground">// Usage example</span>
               <br />
-              <span className="text-primary">import</span> removeMd{" "}
-              <span className="text-primary">from</span>{" "}
-              <span className="text-green-600">'remove-markdown'</span>;
+              <span className="text-primary font-bold">import</span> removeMd{" "}
+              <span className="text-primary font-bold">from</span>{" "}
+              <span className="neo-bg-green px-1">'remove-markdown'</span>;
               <br />
-              <span className="text-primary">const</span> plainText = removeMd(
-              <span className="text-green-600">'**markdown** text'</span>);
+              <span className="text-primary font-bold">const</span> plainText = removeMd(
+              <span className="neo-bg-green px-1">'**markdown** text'</span>);
             </p>
           </div>
         </div>
       </main>
 
       {/* Footer */}
-      <footer className="mt-16 border-t border-border bg-white/50 backdrop-blur-sm">
+      <footer className="mt-16 border-t-4 border-black bg-white shadow-[0_-4px_0px_0px_black]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-muted-foreground font-medium">
               Official website for the{" "}
               <a
                 href="https://www.npmjs.com/package/remove-markdown"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-primary hover:underline font-medium"
+                className="text-primary hover:underline font-bold"
               >
                 remove-markdown
               </a>{" "}
@@ -1058,7 +1057,7 @@ export default function Index() {
                 href="https://github.com/stiang/remove-markdown"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 bg-muted/50 text-foreground border border-border rounded-lg hover:bg-muted transition-colors font-medium text-sm"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-white text-foreground border-3 border-black rounded-md shadow-[4px_4px_0px_0px_black] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_black] transition-all font-semibold text-sm"
               >
                 <svg
                   className="w-4 h-4"
@@ -1073,7 +1072,7 @@ export default function Index() {
                 href="https://www.npmjs.com/package/remove-markdown"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-opacity font-medium text-sm"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground border-3 border-black rounded-md shadow-[4px_4px_0px_0px_black] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_black] transition-all font-semibold text-sm"
               >
                 <svg
                   className="w-4 h-4"
@@ -1096,9 +1095,9 @@ export default function Index() {
         rel="noopener noreferrer"
         className="fixed bottom-6 right-6 z-50 group"
       >
-        <div className="flex items-center gap-3 bg-gradient-to-r from-primary to-purple-600 text-white px-5 py-3 rounded-full shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 transition-all hover:scale-105">
+        <div className="flex items-center gap-3 bg-primary text-white px-5 py-3 rounded-md border-3 border-black shadow-[6px_6px_0px_0px_black] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[3px_3px_0px_0px_black] transition-all">
           <Zap className="w-4 h-4" />
-          <span className="font-semibold text-sm">Made with Builder</span>
+          <span className="font-bold text-sm">Made with Builder</span>
           <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
         </div>
       </a>
