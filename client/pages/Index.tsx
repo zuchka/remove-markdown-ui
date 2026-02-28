@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import removeMd from "remove-markdown";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -20,7 +21,8 @@ import {
   Eye,
   EyeOff,
   Edit,
-  FileCode
+  FileCode,
+  Share2
 } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Switch } from "@/components/ui/switch";
@@ -123,6 +125,7 @@ const DEFAULT_OPTIONS = {
 type RemoveMarkdownOptions = typeof DEFAULT_OPTIONS;
 
 export default function Index() {
+  const { id } = useParams();
   const [markdown, setMarkdown] = useState(DEFAULT_MARKDOWN);
   const [copied, setCopied] = useState(false);
   const [codeCopied, setCodeCopied] = useState(false);
@@ -131,13 +134,55 @@ export default function Index() {
   const [showPreview, setShowPreview] = useState(false);
   const [options, setOptions] = useState<RemoveMarkdownOptions>(DEFAULT_OPTIONS);
   const [htmlTagsInput, setHtmlTagsInput] = useState('');
+  const [isSharing, setIsSharing] = useState(false);
+  const [shareUrl, setShareUrl] = useState<string | null>(null);
+  const [isLoadingShare, setIsLoadingShare] = useState(false);
   const { toast } = useToast();
 
-  // Parse URL parameters on mount
+  // Load shared content if ID is present
   useEffect(() => {
+    if (id) {
+      setIsLoadingShare(true);
+      fetch(`/api/share/${id}`)
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error('Share not found');
+          }
+          return res.json();
+        })
+        .then((data) => {
+          setMarkdown(data.markdown);
+          setOptions(data.options);
+          // Update HTML tags input if present
+          if (data.options.htmlTagsToSkip?.length > 0) {
+            setHtmlTagsInput(data.options.htmlTagsToSkip.join(','));
+          }
+          toast({
+            title: "Shared content loaded",
+            description: "You're viewing a shared markdown setup.",
+          });
+        })
+        .catch((error) => {
+          console.error('Error loading share:', error);
+          toast({
+            title: "Share not found",
+            description: "The shared link could not be found or has expired.",
+            variant: "destructive",
+          });
+        })
+        .finally(() => {
+          setIsLoadingShare(false);
+        });
+    }
+  }, [id]);
+
+  // Parse URL parameters on mount (only if not loading a share)
+  useEffect(() => {
+    if (id) return; // Skip if loading a share
+
     const params = new URLSearchParams(window.location.search);
     const urlOptions: Partial<RemoveMarkdownOptions> = {};
-    
+
     if (params.has('sl')) urlOptions.stripListLeaders = params.get('sl') === '1';
     if (params.has('luc')) urlOptions.listUnicodeChar = params.get('luc') || '';
     if (params.has('gfm')) urlOptions.gfm = params.get('gfm') === '1';
@@ -152,38 +197,40 @@ export default function Index() {
         setHtmlTagsInput(tags);
       }
     }
-    
+
     if (Object.keys(urlOptions).length > 0) {
       setOptions({ ...DEFAULT_OPTIONS, ...urlOptions });
     }
-  }, []);
+  }, [id]);
 
-  // Update URL parameters when options change
+  // Update URL parameters when options change (skip if viewing shared link)
   useEffect(() => {
+    if (id) return; // Don't update URL when viewing a shared link
+
     const params = new URLSearchParams();
-    
-    if (options.stripListLeaders !== DEFAULT_OPTIONS.stripListLeaders) 
+
+    if (options.stripListLeaders !== DEFAULT_OPTIONS.stripListLeaders)
       params.set('sl', options.stripListLeaders ? '1' : '0');
-    if (options.listUnicodeChar) 
+    if (options.listUnicodeChar)
       params.set('luc', options.listUnicodeChar);
-    if (options.gfm !== DEFAULT_OPTIONS.gfm) 
+    if (options.gfm !== DEFAULT_OPTIONS.gfm)
       params.set('gfm', options.gfm ? '1' : '0');
-    if (options.useImgAltText !== DEFAULT_OPTIONS.useImgAltText) 
+    if (options.useImgAltText !== DEFAULT_OPTIONS.useImgAltText)
       params.set('img', options.useImgAltText ? '1' : '0');
-    if (options.abbr !== DEFAULT_OPTIONS.abbr) 
+    if (options.abbr !== DEFAULT_OPTIONS.abbr)
       params.set('abbr', options.abbr ? '1' : '0');
-    if (options.replaceLinksWithURL !== DEFAULT_OPTIONS.replaceLinksWithURL) 
+    if (options.replaceLinksWithURL !== DEFAULT_OPTIONS.replaceLinksWithURL)
       params.set('url', options.replaceLinksWithURL ? '1' : '0');
-    if (options.separateLinksAndTexts) 
+    if (options.separateLinksAndTexts)
       params.set('sep', options.separateLinksAndTexts);
-    if (options.htmlTagsToSkip.length > 0) 
+    if (options.htmlTagsToSkip.length > 0)
       params.set('skip', options.htmlTagsToSkip.join(','));
-    
-    const newUrl = params.toString() 
+
+    const newUrl = params.toString()
       ? `${window.location.pathname}?${params.toString()}`
       : window.location.pathname;
     window.history.replaceState({}, '', newUrl);
-  }, [options]);
+  }, [options, id]);
 
   const plainText = removeMd(markdown, {
     ...options,
@@ -258,6 +305,47 @@ export default function Index() {
       .map(t => t.trim())
       .filter(t => t.length > 0);
     setOptions({ ...options, htmlTagsToSkip: tags });
+  };
+
+  const handleShare = async () => {
+    setIsSharing(true);
+    try {
+      const response = await fetch('/api/share', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          markdown,
+          options,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create share');
+      }
+
+      const data = await response.json();
+      const fullUrl = `${window.location.origin}${data.shortUrl}`;
+      setShareUrl(fullUrl);
+
+      // Copy to clipboard
+      await navigator.clipboard.writeText(fullUrl);
+
+      toast({
+        title: "Link copied!",
+        description: "The shareable link has been copied to your clipboard.",
+      });
+    } catch (error) {
+      console.error('Error creating share:', error);
+      toast({
+        title: "Share failed",
+        description: "Failed to create shareable link. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSharing(false);
+    }
   };
 
   const renderDiffView = () => {
@@ -679,22 +767,41 @@ export default function Index() {
                     {showDiff ? 'diff.txt' : 'output.txt'}
                   </span>
                 </div>
-                <button
-                  onClick={handleCopy}
-                  className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-primary hover:bg-primary/10 rounded-lg transition-colors"
-                >
-                  {copied ? (
-                    <>
-                      <Check className="w-3.5 h-3.5" />
-                      Copied!
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="w-3.5 h-3.5" />
-                      Copy
-                    </>
-                  )}
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={handleShare}
+                    disabled={isSharing}
+                    className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-primary hover:bg-primary/10 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isSharing ? (
+                      <>
+                        <div className="w-3.5 h-3.5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                        Sharing...
+                      </>
+                    ) : (
+                      <>
+                        <Share2 className="w-3.5 h-3.5" />
+                        Share
+                      </>
+                    )}
+                  </button>
+                  <button
+                    onClick={handleCopy}
+                    className="flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-primary hover:bg-primary/10 rounded-lg transition-colors"
+                  >
+                    {copied ? (
+                      <>
+                        <Check className="w-3.5 h-3.5" />
+                        Copied!
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3.5 h-3.5" />
+                        Copy
+                      </>
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
             <div className="p-6">
