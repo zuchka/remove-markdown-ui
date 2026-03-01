@@ -10,10 +10,13 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { LibrarySelector } from "@/components/LibrarySelector";
+import { LibrarySummary } from "@/components/LibrarySummary";
+import { LibrarySettingsDialog } from "@/components/LibrarySettingsDialog";
 import { OutputGrid } from "@/components/OutputPanel";
 import { TestCases } from "@/components/TestCases";
 import { MarkdownCheatSheet } from "@/components/MarkdownCheatSheet";
 import { ASTVisualizer } from "@/components/ASTVisualizer";
+import { ComparisonModeSelector, type ComparisonMode } from "@/components/ComparisonModeSelector";
 import { Button } from "@/components/ui/button";
 
 // Import and register all library adapters
@@ -119,16 +122,53 @@ export default function Index() {
   
   // State
   const [markdown, setMarkdown] = useState(DEFAULT_MARKDOWN);
-  const [selectedLibraries, setSelectedLibraries] = useState<string[]>(['marked', 'remove-markdown']);
+  const [comparisonMode, setComparisonMode] = useState<ComparisonMode>('html');
+  const [selectedLibraries, setSelectedLibraries] = useState<string[]>(['marked', 'markdown-it']);
   const [outputs, setOutputs] = useState<Record<string, ConversionResult>>({});
   const [libraryOptions, setLibraryOptions] = useState<Record<string, Record<string, any>>>({});
   const [isSharing, setIsSharing] = useState(false);
   const [astViewerOpen, setAstViewerOpen] = useState(false);
   const [currentAST, setCurrentAST] = useState<ASTResult | null>(null);
   const [currentASTLibrary, setCurrentASTLibrary] = useState<string>('');
+  const [settingsDialogOpen, setSettingsDialogOpen] = useState(false);
+  const [settingsLibraryId, setSettingsLibraryId] = useState<string>('');
 
-  // Get available libraries - memoized
+  // Get available libraries - memoized and filtered by comparison mode
   const availableLibraries = useMemo(() => getAllLibraries(), []);
+
+  const filteredLibraries = useMemo(() => {
+    if (comparisonMode === 'mixed') {
+      return availableLibraries;
+    }
+    const categoryFilter = comparisonMode === 'html' ? 'renderer' : 'plaintext';
+    return availableLibraries.filter(lib => lib.category === categoryFilter);
+  }, [availableLibraries, comparisonMode]);
+
+  // Handle comparison mode changes
+  const handleComparisonModeChange = useCallback((newMode: ComparisonMode) => {
+    setComparisonMode(newMode);
+
+    // Auto-adjust selected libraries when switching modes
+    if (newMode !== 'mixed') {
+      const categoryFilter = newMode === 'html' ? 'renderer' : 'plaintext';
+      const compatibleLibraries = availableLibraries.filter(lib => lib.category === categoryFilter);
+      const validSelections = selectedLibraries.filter(id =>
+        compatibleLibraries.some(lib => lib.id === id)
+      );
+
+      // If no valid selections, pick defaults based on mode
+      if (validSelections.length === 0) {
+        const defaults = newMode === 'html'
+          ? ['marked', 'markdown-it']
+          : ['remove-markdown'];
+        setSelectedLibraries(defaults.filter(id =>
+          compatibleLibraries.some(lib => lib.id === id)
+        ));
+      } else {
+        setSelectedLibraries(validSelections);
+      }
+    }
+  }, [availableLibraries, selectedLibraries]);
 
   // Load shared content if ID is present
   useEffect(() => {
@@ -140,6 +180,9 @@ export default function Index() {
         })
         .then((data) => {
           setMarkdown(data.markdown);
+          if (data.comparisonMode) {
+            setComparisonMode(data.comparisonMode);
+          }
           if (data.selectedLibraries) {
             setSelectedLibraries(data.selectedLibraries);
           }
@@ -199,6 +242,7 @@ export default function Index() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           markdown,
+          comparisonMode,
           selectedLibraries,
           libraryOptions,
         }),
@@ -229,7 +273,8 @@ export default function Index() {
 
   const handleReset = () => {
     setMarkdown(DEFAULT_MARKDOWN);
-    setSelectedLibraries(['marked', 'remove-markdown']);
+    setComparisonMode('html');
+    setSelectedLibraries(['marked', 'markdown-it']);
     setLibraryOptions({});
     toast({
       title: "Reset complete",
@@ -247,6 +292,22 @@ export default function Index() {
       setAstViewerOpen(true);
     }
   }, [markdown, availableLibraries]);
+
+  const handleShowSettings = useCallback((libraryId: string) => {
+    setSettingsLibraryId(libraryId);
+    setSettingsDialogOpen(true);
+  }, []);
+
+  const handleSaveSettings = useCallback((libraryId: string, options: Record<string, any>) => {
+    setLibraryOptions(prev => ({
+      ...prev,
+      [libraryId]: options,
+    }));
+    toast({
+      title: "Settings saved",
+      description: "Library options have been updated.",
+    });
+  }, [toast]);
 
   const handleLoadTestCase = useCallback((testMarkdown: string) => {
     setMarkdown(testMarkdown);
@@ -336,31 +397,36 @@ export default function Index() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {/* Info Banner */}
-        <div className="mb-6 neo-bg-yellow border-4 border-black rounded-md p-4 shadow-[8px_8px_0px_0px_black]">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-md bg-white border-3 border-black flex items-center justify-center flex-shrink-0">
-              <Sparkles className="w-4 h-4 text-black" />
-            </div>
-            <div>
-              <p className="text-sm text-foreground font-medium">
-                Compare multiple markdown libraries side-by-side. Select libraries below to see how each one processes your markdown.
-              </p>
-            </div>
+        {/* Info Banner - Compact */}
+        <div className="mb-6 neo-bg-yellow border-3 border-black rounded-md p-3 shadow-[6px_6px_0px_0px_black]">
+          <div className="flex items-center gap-2">
+            <Sparkles className="w-4 h-4 text-black flex-shrink-0" />
+            <p className="text-xs text-foreground font-semibold">
+              Compare multiple markdown libraries side-by-side. Choose your comparison mode and libraries below.
+            </p>
           </div>
         </div>
 
-        {/* Library Selector */}
-        <div className="mb-6">
-          <label className="block text-sm font-bold text-foreground mb-2">
-            Select Libraries to Compare
-          </label>
-          <LibrarySelector
-            libraries={availableLibraries}
-            selectedLibraries={selectedLibraries}
-            onChange={setSelectedLibraries}
-            maxSelection={4}
+        {/* Controls Section */}
+        <div className="space-y-4 mb-6">
+          {/* Comparison Mode */}
+          <ComparisonModeSelector
+            mode={comparisonMode}
+            onChange={handleComparisonModeChange}
           />
+
+          {/* Library Selector */}
+          <div>
+            <label className="block text-sm font-bold text-foreground mb-2">
+              Select Libraries to Compare
+            </label>
+            <LibrarySelector
+              libraries={filteredLibraries}
+              selectedLibraries={selectedLibraries}
+              onChange={setSelectedLibraries}
+              maxSelection={4}
+            />
+          </div>
         </div>
 
         {/* Editor and Output Grid */}
@@ -396,19 +462,54 @@ export default function Index() {
 
           {/* Output Grid */}
           <div>
-            <label className="block text-sm font-bold text-foreground mb-2">
-              Output ({selectedLibraries.length} {selectedLibraries.length === 1 ? 'library' : 'libraries'})
-            </label>
+            <div className="flex items-center justify-between mb-3">
+              <label className="text-sm font-bold text-foreground">
+                Output Comparison
+              </label>
+            </div>
             {outputData.length > 0 ? (
               <div className="space-y-4">
-                <OutputGrid outputs={outputData} onShowAST={handleShowAST} />
+                <LibrarySummary
+                  libraries={outputData.map(item => item.library)}
+                />
+                <OutputGrid
+                  outputs={outputData}
+                  libraryOptions={libraryOptions}
+                  onShowAST={handleShowAST}
+                  onShowSettings={handleShowSettings}
+                />
               </div>
             ) : (
               <div className="bg-white rounded-md border-4 border-black shadow-[8px_8px_0px_0px_black] p-12 text-center">
-                <FileText className="w-16 h-16 mx-auto mb-4 text-muted-foreground opacity-30" />
-                <p className="text-muted-foreground text-sm font-medium">
-                  Select at least one library to see output
-                </p>
+                <div className="max-w-md mx-auto">
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-md bg-muted border-3 border-black flex items-center justify-center">
+                    <FileText className="w-8 h-8 text-muted-foreground" />
+                  </div>
+                  <h3 className="text-lg font-bold text-foreground mb-2">
+                    No Libraries Selected
+                  </h3>
+                  <p className="text-muted-foreground text-sm font-medium mb-4">
+                    Choose one or more libraries above to start comparing markdown output.
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-2 justify-center">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setSelectedLibraries(['marked', 'markdown-it'])}
+                      className="border-3 border-black shadow-[4px_4px_0px_0px_black]"
+                    >
+                      Try HTML Renderers
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setSelectedLibraries(['remove-markdown', 'remark'])}
+                      className="border-3 border-black shadow-[4px_4px_0px_0px_black]"
+                    >
+                      Try Text Converters
+                    </Button>
+                  </div>
+                </div>
               </div>
             )}
           </div>
@@ -421,6 +522,18 @@ export default function Index() {
           astResult={currentAST}
           libraryName={currentASTLibrary}
         />
+
+        {/* Library Settings Dialog */}
+        {settingsLibraryId && (
+          <LibrarySettingsDialog
+            open={settingsDialogOpen}
+            onOpenChange={setSettingsDialogOpen}
+            libraryId={settingsLibraryId}
+            libraryName={availableLibraries.find(lib => lib.id === settingsLibraryId)?.name || settingsLibraryId}
+            currentOptions={libraryOptions[settingsLibraryId] || {}}
+            onSave={(options) => handleSaveSettings(settingsLibraryId, options)}
+          />
+        )}
 
         {/* Builder CTA */}
         <div className="mt-12">

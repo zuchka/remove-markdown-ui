@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Copy, Check, Settings2, Code2, FileText, Sparkles } from 'lucide-react';
+import { Copy, Check, Settings2, Code2, FileText, Sparkles, CodeXml, FileType } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
@@ -11,6 +11,7 @@ interface OutputPanelProps {
   error?: string;
   processingTime?: number;
   isHTML?: boolean;
+  hasCustomSettings?: boolean;
   onCopy?: () => void;
   onShowAST?: () => void;
   onShowSettings?: () => void;
@@ -22,6 +23,7 @@ export function OutputPanel({
   error,
   processingTime,
   isHTML = false,
+  hasCustomSettings = false,
   onCopy,
   onShowAST,
   onShowSettings,
@@ -40,13 +42,18 @@ export function OutputPanel({
 
   const wordCount = output.split(/\s+/).filter(Boolean).length;
   const charCount = output.length;
+  const isHTMLRenderer = library.category === 'renderer';
 
   return (
-    <div className="bg-white rounded-md border-4 border-black shadow-[8px_8px_0px_0px_black] overflow-hidden flex flex-col h-[350px]">
+    <div className={cn(
+      "bg-white rounded-md border-4 border-black shadow-[8px_8px_0px_0px_black] overflow-hidden flex flex-col h-[350px]",
+      "border-l-[6px]",
+      isHTMLRenderer ? "neo-border-category-html" : "neo-border-category-text"
+    )}>
       {/* Header */}
       <div className="bg-muted border-b-4 border-black px-4 py-3">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <div className="flex items-center gap-1.5">
               <div className="w-2 h-2 rounded-full neo-bg-green border-2 border-black"></div>
               <div className="w-2 h-2 rounded-full bg-accent border-2 border-black"></div>
@@ -55,11 +62,28 @@ export function OutputPanel({
             <span className="ml-2 text-sm font-bold text-foreground">
               {library.name}
             </span>
-            <Badge variant="outline" className="text-xs">
-              {library.category === 'renderer' ? 'HTML' : 'Text'}
+            <Badge
+              className={cn(
+                "text-xs font-bold border-3 border-black shadow-[3px_3px_0px_0px_black]",
+                isHTMLRenderer
+                  ? "neo-bg-category-html"
+                  : "neo-bg-category-text"
+              )}
+            >
+              {isHTMLRenderer ? (
+                <>
+                  <CodeXml className="w-3.5 h-3.5 mr-1" />
+                  HTML
+                </>
+              ) : (
+                <>
+                  <FileType className="w-3.5 h-3.5 mr-1" />
+                  Text
+                </>
+              )}
             </Badge>
             {library.supportsAST && (
-              <Badge variant="secondary" className="text-xs">
+              <Badge variant="secondary" className="text-xs border-3 border-black shadow-[3px_3px_0px_0px_black] bg-purple-100 text-purple-900 font-bold">
                 <Sparkles className="w-3 h-3 mr-1" />
                 AST
               </Badge>
@@ -72,9 +96,13 @@ export function OutputPanel({
                 variant="ghost"
                 size="sm"
                 onClick={onShowSettings}
-                className="h-7 px-2"
+                className="h-7 px-2 relative"
+                title={hasCustomSettings ? "Custom settings applied" : "Configure settings"}
               >
                 <Settings2 className="w-3.5 h-3.5" />
+                {hasCustomSettings && (
+                  <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-primary border-2 border-white rounded-full" />
+                )}
               </Button>
             )}
             {library.supportsAST && onShowAST && (
@@ -133,9 +161,13 @@ export function OutputPanel({
             </div>
           )
         ) : (
-          <div className="text-center text-muted-foreground italic py-8">
-            <FileText className="w-12 h-12 mx-auto mb-2 opacity-30" />
-            <p className="text-sm font-medium">Output will appear here...</p>
+          <div className="flex items-center justify-center h-full text-center text-muted-foreground py-8">
+            <div>
+              <div className="w-12 h-12 mx-auto mb-2 rounded-md bg-muted/50 border-2 border-dashed border-muted-foreground/20 flex items-center justify-center">
+                <FileText className="w-6 h-6 opacity-40" />
+              </div>
+              <p className="text-xs font-medium">Processing...</p>
+            </div>
           </div>
         )}
       </div>
@@ -151,6 +183,7 @@ interface OutputGridProps {
     error?: string;
     processingTime?: number;
   }>;
+  libraryOptions?: Record<string, Record<string, any>>;
   onCopyOutput?: (libraryId: string, output: string) => void;
   onShowAST?: (libraryId: string) => void;
   onShowSettings?: (libraryId: string) => void;
@@ -158,10 +191,25 @@ interface OutputGridProps {
 
 export function OutputGrid({
   outputs,
+  libraryOptions = {},
   onCopyOutput,
   onShowAST,
   onShowSettings,
 }: OutputGridProps) {
+  // Helper to check if library has custom settings
+  const hasCustomSettings = (libraryId: string): boolean => {
+    const options = libraryOptions[libraryId];
+    if (!options) return false;
+
+    // Import needed here to avoid circular dependency
+    const { getLibraryAdapter } = require('@/lib/markdown-libraries/registry');
+    const adapter = getLibraryAdapter(libraryId);
+    if (!adapter) return false;
+
+    const defaults = adapter.getDefaultOptions();
+    return Object.keys(defaults).some(key => options[key] !== defaults[key]);
+  };
+
   return (
     <div className="flex flex-col gap-4 h-full">
       {outputs.map(({ libraryId, library, output, error, processingTime }) => (
@@ -172,6 +220,7 @@ export function OutputGrid({
           error={error}
           processingTime={processingTime}
           isHTML={library.category === 'renderer'}
+          hasCustomSettings={hasCustomSettings(libraryId)}
           onCopy={() => onCopyOutput?.(libraryId, output)}
           onShowAST={library.supportsAST ? () => onShowAST?.(libraryId) : undefined}
           onShowSettings={() => onShowSettings?.(libraryId)}
