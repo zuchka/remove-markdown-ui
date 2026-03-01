@@ -41,7 +41,7 @@ export function ComparisonModeSelector({
           </SelectItem>
           <SelectItem value="text">
             <div className="flex items-center gap-2">
-              <FileText className="w-4 h-4 text-green-600" />
+              <FileText className="w-4 h-4 text-blue-600" />
               <span className="font-semibold">Text Converters</span>
             </div>
           </SelectItem>

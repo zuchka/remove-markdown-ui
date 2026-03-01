@@ -55,7 +55,7 @@ export function OutputPanel({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 flex-wrap">
             <div className="flex items-center gap-1.5">
-              <div className="w-2 h-2 rounded-full neo-bg-green border-2 border-black"></div>
+              <div className="w-2 h-2 rounded-full bg-blue-500 border-2 border-black"></div>
               <div className="w-2 h-2 rounded-full bg-accent border-2 border-black"></div>
               <div className="w-2 h-2 rounded-full bg-destructive border-2 border-black"></div>
             </div>
@@ -122,7 +122,7 @@ export function OutputPanel({
               className="h-7 px-2"
             >
               {copied ? (
-                <Check className="w-3.5 h-3.5 text-green-600" />
+                <Check className="w-3.5 h-3.5 text-blue-600" />
               ) : (
                 <Copy className="w-3.5 h-3.5" />
               )}
