@@ -13,7 +13,7 @@
   */
   :root {
     /* Core colors - Light mode with purple theme */
-    --background: 308 50% 94%;        /* Light purple-pink background */
+    --background: 308 15% 96%;        /* Soft purple-tinted background */
     --foreground: 0 0% 0%;            /* Black text for maximum contrast */
 
     --card: 0 0% 100%;                /* White cards */
@@ -22,7 +22,7 @@
     --popover: 0 0% 100%;             /* White popovers */
     --popover-foreground: 0 0% 0%;    /* Black text */
 
-    --primary: 310 80% 72%;           /* Bold purple (main color) */
+    --primary: 280 45% 65%;           /* Softer purple (main color) */
     --primary-foreground: 0 0% 0%;    /* Black text on primary */
 
     --secondary: 0 0% 100%;           /* White secondary */
@@ -44,11 +44,11 @@
     --radius: 0.3rem;                /* 5px - slightly rounded, not sharp */
 
     /* Sidebar colors */
-    --sidebar-background: 308 30% 96%;
+    --sidebar-background: 308 12% 97%;
     --sidebar-foreground: 0 0% 0%;
-    --sidebar-primary: 310 80% 72%;
+    --sidebar-primary: 280 45% 65%;
     --sidebar-primary-foreground: 0 0% 0%;
-    --sidebar-accent: 308 20% 90%;
+    --sidebar-accent: 308 10% 92%;
     --sidebar-accent-foreground: 0 0% 0%;
     --sidebar-border: 0 0% 0%;
     --sidebar-ring: 0 0% 0%;
@@ -71,21 +71,21 @@
     --neo-blue: 210 100% 60%;
     --neo-red: 0 85% 60%;
     --neo-green: 120 60% 50%;
-    --neo-pink: 310 80% 72%;  /* Updated to match primary purple */
+    --neo-pink: 280 45% 65%;  /* Updated to match primary purple */
   }
 
   .dark {
     /* Core colors - Dark mode with purple theme */
-    --background: 316 40% 30%;       /* Dark purple background */
+    --background: 316 20% 25%;       /* Softer dark purple background */
     --foreground: 0 0% 95%;          /* White text */
 
-    --card: 316 20% 24%;
+    --card: 316 12% 20%;
     --card-foreground: 0 0% 95%;
 
-    --popover: 316 20% 24%;
+    --popover: 316 12% 20%;
     --popover-foreground: 0 0% 95%;
 
-    --primary: 309 85% 67%;          /* Bold purple (main color dark mode) */
+    --primary: 280 50% 70%;          /* Softer purple (main color dark mode) */
     --primary-foreground: 0 0% 0%;   /* Black text on primary */
 
     --secondary: 316 15% 25%;
@@ -104,9 +104,9 @@
     --input: 0 0% 0%;
     --ring: 0 0% 100%;               /* White ring in dark mode */
 
-    --sidebar-background: 316 30% 26%;
+    --sidebar-background: 316 15% 22%;
     --sidebar-foreground: 0 0% 95%;
-    --sidebar-primary: 309 85% 67%;
+    --sidebar-primary: 280 50% 70%;
     --sidebar-primary-foreground: 0 0% 0%;
     --sidebar-accent: 316 15% 25%;
     --sidebar-accent-foreground: 0 0% 95%;
