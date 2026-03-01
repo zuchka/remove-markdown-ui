@@ -63,7 +63,7 @@ export function LibrarySelector({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between h-auto min-h-[48px] py-3 px-4 bg-muted/30 hover:bg-muted/50"
+          className="w-full justify-between h-auto min-h-[48px] py-3 px-4 bg-white hover:bg-muted border-4 border-black shadow-[6px_6px_0px_0px_black] hover:shadow-[4px_4px_0px_0px_black] hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
         >
           <div className="flex flex-wrap gap-2 flex-1 items-center">
             {selectedLibraries.length === 0 ? (
@@ -75,7 +75,7 @@ export function LibrarySelector({
                   <Badge
                     key={id}
                     variant="default"
-                    className="text-xs bg-white border-2 border-black text-black hover:bg-white shadow-[2px_2px_0px_0px_black]"
+                    className="text-xs bg-primary text-white border-3 border-black hover:bg-primary shadow-[3px_3px_0px_0px_black] font-bold"
                   >
                     {lib.name}
                     {lib.supportsAST && (
@@ -86,7 +86,7 @@ export function LibrarySelector({
               })
             )}
           </div>
-          <ChevronsUpDown className="ml-3 h-5 w-5 shrink-0 opacity-70" />
+          <ChevronsUpDown className="ml-3 h-5 w-5 shrink-0 text-foreground" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[400px] p-0" align="start">
