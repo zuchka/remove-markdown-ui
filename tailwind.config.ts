@@ -68,6 +68,16 @@ export default {
           "4": "var(--chart-4)",
           "5": "var(--chart-5)",
         },
+        "category-html": {
+          DEFAULT: "var(--category-html)",
+          foreground: "var(--category-html-foreground)",
+          border: "var(--category-html-border)",
+        },
+        "category-text": {
+          DEFAULT: "var(--category-text)",
+          foreground: "var(--category-text-foreground)",
+          border: "var(--category-text-border)",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

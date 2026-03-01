@@ -22,6 +22,14 @@
   --chart-5: #7A83FF;
   --chart-active-dot: #000;
 
+  /* Category colors for output types */
+  --category-html: oklch(65% 0.15 250); /* Blue for HTML renderers */
+  --category-html-foreground: oklch(100% 0 0);
+  --category-html-border: oklch(50% 0.18 250);
+  --category-text: oklch(65% 0.15 140); /* Green for text converters */
+  --category-text-foreground: oklch(100% 0 0);
+  --category-text-border: oklch(50% 0.18 140);
+
   /* Legacy color mappings for compatibility */
   --primary: var(--main);
   --primary-foreground: var(--main-foreground);
@@ -71,6 +79,14 @@
   --chart-4: #04C86D;
   --chart-5: #7A83FF;
   --chart-active-dot: #fff;
+
+  /* Category colors for dark mode */
+  --category-html: oklch(60% 0.15 250);
+  --category-html-foreground: oklch(100% 0 0);
+  --category-html-border: oklch(70% 0.18 250);
+  --category-text: oklch(60% 0.15 140);
+  --category-text-foreground: oklch(100% 0 0);
+  --category-text-border: oklch(70% 0.18 140);
 
   /* Legacy color mappings for dark mode */
   --muted: oklch(35% 0.03 270);
@@ -156,5 +172,24 @@
   .neo-press:active {
     transform: translate(4px, 4px);
     box-shadow: none;
+  }
+
+  /* Category-specific utility classes */
+  .neo-bg-category-html {
+    background-color: var(--category-html);
+    color: var(--category-html-foreground);
+  }
+
+  .neo-border-category-html {
+    border-left-color: var(--category-html-border);
+  }
+
+  .neo-bg-category-text {
+    background-color: var(--category-text);
+    color: var(--category-text-foreground);
+  }
+
+  .neo-border-category-text {
+    border-left-color: var(--category-text-border);
   }
 }
