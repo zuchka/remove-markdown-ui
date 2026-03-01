@@ -42,7 +42,7 @@ export function OutputPanel({
   const charCount = output.length;
 
   return (
-    <div className="bg-white rounded-md border-4 border-black shadow-[8px_8px_0px_0px_black] overflow-hidden flex flex-col h-full">
+    <div className="bg-white rounded-md border-4 border-black shadow-[8px_8px_0px_0px_black] overflow-hidden flex flex-col h-[350px]">
       {/* Header */}
       <div className="bg-muted border-b-4 border-black px-4 py-3">
         <div className="flex items-center justify-between">
@@ -162,16 +162,8 @@ export function OutputGrid({
   onShowAST,
   onShowSettings,
 }: OutputGridProps) {
-  const gridCols = outputs.length === 1 
-    ? 'grid-cols-1' 
-    : outputs.length === 2 
-    ? 'grid-cols-2' 
-    : outputs.length === 3
-    ? 'grid-cols-3'
-    : 'grid-cols-2';
-
   return (
-    <div className={cn('grid gap-4 h-full', gridCols)}>
+    <div className="flex flex-col gap-4 h-full">
       {outputs.map(({ libraryId, library, output, error, processingTime }) => (
         <OutputPanel
           key={libraryId}

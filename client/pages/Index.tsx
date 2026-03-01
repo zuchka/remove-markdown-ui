@@ -364,41 +364,45 @@ export default function Index() {
         </div>
 
         {/* Editor and Output Grid */}
-        <div className="grid lg:grid-cols-2 gap-6 min-h-[600px]">
+        <div className="space-y-6">
           {/* Input Panel */}
-          <div className="bg-white rounded-md border-4 border-black shadow-[8px_8px_0px_0px_black] overflow-hidden flex flex-col">
-            <div className="bg-muted border-b-4 border-black px-4 py-3">
-              <div className="flex items-center gap-2">
-                <div className="flex items-center gap-1.5">
-                  <div className="w-2 h-2 rounded-full bg-destructive border-2 border-black"></div>
-                  <div className="w-2 h-2 rounded-full bg-accent border-2 border-black"></div>
-                  <div className="w-2 h-2 rounded-full neo-bg-green border-2 border-black"></div>
+          <div>
+            <label className="block text-sm font-bold text-foreground mb-2">
+              Markdown Input
+            </label>
+            <div className="bg-white rounded-md border-4 border-black shadow-[8px_8px_0px_0px_black] overflow-hidden flex flex-col h-[400px]">
+              <div className="bg-muted border-b-4 border-black px-4 py-3">
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1.5">
+                    <div className="w-2 h-2 rounded-full bg-destructive border-2 border-black"></div>
+                    <div className="w-2 h-2 rounded-full bg-accent border-2 border-black"></div>
+                    <div className="w-2 h-2 rounded-full neo-bg-green border-2 border-black"></div>
+                  </div>
+                  <span className="ml-2 text-sm font-bold text-foreground">
+                    input.md
+                  </span>
                 </div>
-                <span className="ml-2 text-sm font-bold text-foreground">
-                  input.md
-                </span>
               </div>
-            </div>
-            <div className="p-4 flex-1 flex flex-col">
-              <label className="block text-sm font-bold text-foreground mb-2">
-                Markdown Input
-              </label>
-              <textarea
-                value={markdown}
-                onChange={(e) => setMarkdown(e.target.value)}
-                className="flex-1 w-full p-4 bg-white border-3 border-black rounded-md focus:outline-none focus:shadow-[4px_4px_0px_0px_black] font-mono text-sm resize-none transition-shadow"
-                placeholder="Enter your markdown here..."
-              />
+              <div className="p-4 flex-1 flex flex-col overflow-hidden">
+                <textarea
+                  value={markdown}
+                  onChange={(e) => setMarkdown(e.target.value)}
+                  className="flex-1 w-full p-4 bg-white border-3 border-black rounded-md focus:outline-none focus:shadow-[4px_4px_0px_0px_black] font-mono text-sm resize-none transition-shadow"
+                  placeholder="Enter your markdown here..."
+                />
+              </div>
             </div>
           </div>
 
           {/* Output Grid */}
-          <div className="flex flex-col">
+          <div>
             <label className="block text-sm font-bold text-foreground mb-2">
               Output ({selectedLibraries.length} {selectedLibraries.length === 1 ? 'library' : 'libraries'})
             </label>
             {outputData.length > 0 ? (
-              <OutputGrid outputs={outputData} onShowAST={handleShowAST} />
+              <div className="space-y-4">
+                <OutputGrid outputs={outputData} onShowAST={handleShowAST} />
+              </div>
             ) : (
               <div className="bg-white rounded-md border-4 border-black shadow-[8px_8px_0px_0px_black] p-12 text-center">
                 <FileText className="w-16 h-16 mx-auto mb-4 text-muted-foreground opacity-30" />
