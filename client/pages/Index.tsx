@@ -293,7 +293,7 @@ export default function Index() {
                   Markdown Playground
                 </h1>
                 <p className="text-xs text-muted-foreground font-medium">
-                  The Regex101 but for Markdown
+                  Like Regex101 but for Markdown
                 </p>
               </div>
             </div>
