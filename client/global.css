@@ -26,9 +26,9 @@
   --category-html: oklch(65% 0.15 250); /* Blue for HTML renderers */
   --category-html-foreground: oklch(100% 0 0);
   --category-html-border: oklch(50% 0.18 250);
-  --category-text: oklch(65% 0.15 140); /* Green for text converters */
+  --category-text: oklch(65% 0.15 220); /* Blue for text converters */
   --category-text-foreground: oklch(100% 0 0);
-  --category-text-border: oklch(50% 0.18 140);
+  --category-text-border: oklch(50% 0.18 220);
 
   /* Legacy color mappings for compatibility */
   --primary: var(--main);
@@ -84,9 +84,9 @@
   --category-html: oklch(60% 0.15 250);
   --category-html-foreground: oklch(100% 0 0);
   --category-html-border: oklch(70% 0.18 250);
-  --category-text: oklch(60% 0.15 140);
+  --category-text: oklch(60% 0.15 220);
   --category-text-foreground: oklch(100% 0 0);
-  --category-text-border: oklch(70% 0.18 140);
+  --category-text-border: oklch(70% 0.18 220);
 
   /* Legacy color mappings for dark mode */
   --muted: oklch(35% 0.03 270);

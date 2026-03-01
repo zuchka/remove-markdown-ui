@@ -168,7 +168,7 @@ function CheatSheetCard({ item, onInsertSyntax }: CheatSheetCardProps) {
             className="h-6 px-2"
           >
             {copiedSyntax ? (
-              <Check className="w-3 h-3 text-green-600" />
+              <Check className="w-3 h-3 text-blue-600" />
             ) : (
               <Copy className="w-3 h-3" />
             )}
@@ -201,7 +201,7 @@ function CheatSheetCard({ item, onInsertSyntax }: CheatSheetCardProps) {
               className="h-6 px-2"
             >
               {copiedExample ? (
-                <Check className="w-3 h-3 text-green-600" />
+                <Check className="w-3 h-3 text-blue-600" />
               ) : (
                 <Copy className="w-3 h-3" />
               )}
@@ -216,7 +216,7 @@ function CheatSheetCard({ item, onInsertSyntax }: CheatSheetCardProps) {
       {/* Output */}
       <div>
         <label className="text-xs font-medium text-muted-foreground block mb-1">Output</label>
-        <div className="text-xs bg-green-50 dark:bg-green-950 p-2 rounded text-green-800 dark:text-green-200">
+        <div className="text-xs bg-blue-50 dark:bg-blue-950 p-2 rounded text-blue-800 dark:text-blue-200">
           {item.output}
         </div>
       </div>
