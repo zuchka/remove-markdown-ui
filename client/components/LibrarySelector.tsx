@@ -63,16 +63,20 @@ export function LibrarySelector({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between h-auto min-h-[40px] py-2"
+          className="w-full justify-between h-auto min-h-[48px] py-3 px-4 bg-muted/30 hover:bg-muted/50"
         >
-          <div className="flex flex-wrap gap-1 flex-1 items-center">
+          <div className="flex flex-wrap gap-2 flex-1 items-center">
             {selectedLibraries.length === 0 ? (
-              <span className="text-muted-foreground">Select libraries to compare...</span>
+              <span className="text-muted-foreground font-medium">Select libraries to compare...</span>
             ) : (
               selectedLibraries.map(id => {
                 const lib = libraries.find(l => l.id === id);
                 return lib ? (
-                  <Badge key={id} variant="secondary" className="text-xs">
+                  <Badge
+                    key={id}
+                    variant="default"
+                    className="text-xs bg-white border-2 border-black text-black hover:bg-white shadow-[2px_2px_0px_0px_black]"
+                  >
                     {lib.name}
                     {lib.supportsAST && (
                       <Sparkles className="w-3 h-3 ml-1 inline-block" />
@@ -82,7 +86,7 @@ export function LibrarySelector({
               })
             )}
           </div>
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          <ChevronsUpDown className="ml-3 h-5 w-5 shrink-0 opacity-70" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[400px] p-0" align="start">
