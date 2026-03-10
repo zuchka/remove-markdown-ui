@@ -13,6 +13,7 @@
     "typecheck": "tsc"
   },
   "dependencies": {
+    "@types/react-grid-layout": "^2.1.0",
     "commonmark": "^0.31.2",
     "cors": "^2.8.5",
     "diff": "^8.0.3",
@@ -22,6 +23,8 @@
     "mdast-util-from-markdown": "^2.0.3",
     "micromark": "^4.0.2",
     "nanoid": "^5.1.6",
+    "react-diff-view": "^3.3.2",
+    "react-grid-layout": "^2.2.2",
     "react-json-tree": "^0.20.0",
     "react-markdown": "^10.1.0",
     "remark": "^15.0.1",

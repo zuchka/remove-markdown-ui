@@ -12,12 +12,23 @@ import { useToast } from "@/hooks/use-toast";
 import { LibrarySelector } from "@/components/LibrarySelector";
 import { LibrarySummary } from "@/components/LibrarySummary";
 import { LibrarySettingsDialog } from "@/components/LibrarySettingsDialog";
-import { OutputGrid } from "@/components/OutputPanel";
 import { TestCases } from "@/components/TestCases";
 import { MarkdownCheatSheet } from "@/components/MarkdownCheatSheet";
 import { ASTVisualizer } from "@/components/ASTVisualizer";
 import { ComparisonModeSelector, type ComparisonMode } from "@/components/ComparisonModeSelector";
 import { Button } from "@/components/ui/button";
+
+// Dashboard components
+import {
+  DashboardLayout,
+  LayoutPresets,
+  InputEditorCard,
+  OutputCard,
+  DiffViewer,
+  GuidedTour,
+  type LayoutPresetType,
+  type DashboardLayout as DashboardLayoutType
+} from "@/components/dashboard";
 
 // Import and register all library adapters
 import '@/lib/markdown-libraries/adapters';
@@ -31,6 +42,8 @@ This is the **Regex101 but for Markdown** - test and compare different markdown 
 ## 🚀 Key Features
 
 - **Multi-Library Comparison**: Test up to 4 markdown libraries simultaneously
+- **Dashboard Layout**: Drag, resize, and arrange your workspace
+- **Layout Presets**: Quick layouts for comparison, focus, and analysis
 - **AST Visualization**: Explore the Abstract Syntax Tree for supported libraries
 - **Test Cases Library**: 20+ pre-built examples to test edge cases
 - **Cheat Sheet**: Quick reference for all markdown syntax
@@ -39,11 +52,11 @@ This is the **Regex101 but for Markdown** - test and compare different markdown 
 
 ## 📝 Getting Started
 
-1. Click "Select libraries to compare" above to choose parsers
-2. Edit this markdown or click "Test Cases" to load examples
-3. See real-time output from each library side-by-side
-4. Click the AST button (✨) on libraries that support it
-5. Use "Cheat Sheet" for syntax reference
+1. Choose a **Layout Preset** (Compare, Focus, or Analyze)
+2. Select libraries to compare using the library selector
+3. Edit this markdown or click "Test Cases" to load examples
+4. Drag and resize cards to customize your workspace
+5. Click the AST button (✨) on libraries that support it
 
 ### Supported Libraries (7 total)
 
@@ -108,8 +121,11 @@ function greet(name) {
 ---
 
 > **Pro Tips:**
-> - Try the **Test Cases** button to load edge case examples
-> - Use **Cheat Sheet** to insert syntax quickly
+> - Try the **Layout Presets** to optimize your workspace
+> - **Drag** cards to rearrange them
+> - **Resize** cards by dragging edges
+> - **Minimize** cards to the dock when not needed
+> - Use **Test Cases** to load edge case examples
 > - Click the **✨ AST** badge to visualize parse trees
 > - **Share** your setup with a unique URL
 > - Compare how different libraries handle the same markdown!
@@ -132,6 +148,13 @@ export default function Index() {
   const [currentASTLibrary, setCurrentASTLibrary] = useState<string>('');
   const [settingsDialogOpen, setSettingsDialogOpen] = useState(false);
   const [settingsLibraryId, setSettingsLibraryId] = useState<string>('');
+  
+  // Dashboard layout state
+  const [layoutPreset, setLayoutPreset] = useState<LayoutPresetType>('compare');
+
+  // Comparison state
+  const [diffViewerOpen, setDiffViewerOpen] = useState(false);
+  const [compareLibraries, setCompareLibraries] = useState<{ lib1: string; lib2: string } | null>(null);
 
   // Get available libraries - memoized and filtered by comparison mode
   const availableLibraries = useMemo(() => getAllLibraries(), []);
@@ -203,7 +226,7 @@ export default function Index() {
           });
         });
     }
-  }, [id]);
+  }, [id, toast]);
 
   // Process markdown with all selected libraries (debounced)
   useEffect(() => {
@@ -276,6 +299,7 @@ export default function Index() {
     setComparisonMode('html');
     setSelectedLibraries(['marked', 'markdown-it']);
     setLibraryOptions({});
+    setLayoutPreset('compare');
     toast({
       title: "Reset complete",
       description: "Markdown and settings have been reset.",
@@ -325,36 +349,91 @@ export default function Index() {
     });
   }, [toast]);
 
-  // Prepare output data for OutputGrid
-  const outputData = selectedLibraries.map(libraryId => {
-    const library = availableLibraries.find(lib => lib.id === libraryId);
-    const output = outputs[libraryId];
-    
-    return {
-      libraryId,
-      library: library!,
-      output: output?.output || '',
-      error: output?.error,
-      processingTime: output?.processingTime,
-    };
-  }).filter(item => item.library);
+  const handleLayoutChange = useCallback((layout: DashboardLayoutType) => {
+    // Layout is automatically saved in DashboardLayout component
+    if (layout.preset === 'custom') {
+      setLayoutPreset('custom');
+    }
+  }, []);
+
+  const handleCompare = useCallback((lib1Id: string, lib2Id: string) => {
+    setCompareLibraries({ lib1: lib1Id, lib2: lib2Id });
+    setDiffViewerOpen(true);
+  }, []);
+
+  // Helper to check if library has custom settings
+  const hasCustomSettings = (libraryId: string): boolean => {
+    const options = libraryOptions[libraryId];
+    if (!options) return false;
+
+    const adapter = getLibraryAdapter(libraryId);
+    if (!adapter) return false;
+
+    const defaults = adapter.getDefaultOptions();
+    return Object.keys(defaults).some(key => options[key] !== defaults[key]);
+  };
+
+  // Prepare dashboard cards
+  const dashboardCards = useMemo(() => {
+    const cards = [
+      // Input card
+      {
+        id: 'input',
+        type: 'input' as const,
+        title: 'Markdown Input',
+        content: (
+          <InputEditorCard
+            value={markdown}
+            onChange={setMarkdown}
+          />
+        ),
+      },
+    ];
+
+    // Output cards for each selected library
+    selectedLibraries.forEach((libraryId, index) => {
+      const library = availableLibraries.find(lib => lib.id === libraryId);
+      const output = outputs[libraryId];
+      
+      if (library) {
+        cards.push({
+          id: `output-${index}`,
+          type: 'output' as const,
+          title: library.name,
+          content: (
+            <OutputCard
+              library={library}
+              output={output?.output || ''}
+              error={output?.error}
+              processingTime={output?.processingTime}
+              hasCustomSettings={hasCustomSettings(libraryId)}
+              onShowAST={library.supportsAST ? () => handleShowAST(libraryId) : undefined}
+              onShowSettings={() => handleShowSettings(libraryId)}
+            />
+          ),
+        });
+      }
+    });
+
+    return cards;
+  }, [markdown, selectedLibraries, availableLibraries, outputs, libraryOptions, handleShowAST, handleShowSettings]);
 
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="border-b-4 border-black bg-white shadow-[0_4px_0px_0px_black] sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between flex-wrap gap-4">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-3">
+          <div className="flex items-center justify-between flex-wrap gap-3">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-md bg-primary border-3 border-black shadow-[4px_4px_0px_0px_black] flex items-center justify-center">
                 <FileText className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-foreground">
+                <h1 className="text-lg font-bold text-foreground">
                   Markdown Playground
                 </h1>
                 <p className="text-xs text-muted-foreground font-medium">
-                  Like Regex101 but for Markdown
+                  Interactive Dashboard • Drag & Resize
                 </p>
               </div>
             </div>
@@ -396,16 +475,23 @@ export default function Index() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {/* Info Banner - Compact */}
+      <main className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {/* Info Banner */}
         <div className="mb-6 neo-bg-yellow border-3 border-black rounded-md p-3 shadow-[6px_6px_0px_0px_black]">
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-black flex-shrink-0" />
             <p className="text-xs text-foreground font-semibold">
-              Compare multiple markdown libraries side-by-side. Choose your comparison mode and libraries below.
+              🎉 <strong>New Dashboard UI!</strong> Drag, resize, and arrange cards. Try layout presets below!
             </p>
           </div>
         </div>
+
+        {/* Layout Presets */}
+        <LayoutPresets
+          currentPreset={layoutPreset}
+          onChange={setLayoutPreset}
+          className="mb-6"
+        />
 
         {/* Controls Section */}
         <div className="space-y-4 mb-6">
@@ -418,7 +504,7 @@ export default function Index() {
           {/* Library Selector */}
           <div>
             <label className="block text-sm font-bold text-foreground mb-2">
-              Select Libraries to Compare
+              Select Libraries to Compare (up to 4)
             </label>
             <LibrarySelector
               libraries={filteredLibraries}
@@ -427,93 +513,85 @@ export default function Index() {
               maxSelection={4}
             />
           </div>
-        </div>
 
-        {/* Editor and Output Grid */}
-        <div className="space-y-6">
-          {/* Input Panel */}
-          <div>
-            <label className="block text-sm font-bold text-foreground mb-2">
-              Markdown Input
-            </label>
-            <div className="bg-white rounded-md border-4 border-black shadow-[8px_8px_0px_0px_black] overflow-hidden flex flex-col h-[400px]">
-              <div className="bg-muted border-b-4 border-black px-4 py-3">
-                <div className="flex items-center gap-2">
-                  <div className="flex items-center gap-1.5">
-                    <div className="w-2 h-2 rounded-full bg-destructive border-2 border-black"></div>
-                    <div className="w-2 h-2 rounded-full bg-accent border-2 border-black"></div>
-                    <div className="w-2 h-2 rounded-full neo-bg-green border-2 border-black"></div>
-                  </div>
-                  <span className="ml-2 text-sm font-bold text-foreground">
-                    input.md
-                  </span>
-                </div>
-              </div>
-              <div className="p-4 flex-1 flex flex-col overflow-hidden">
-                <textarea
-                  value={markdown}
-                  onChange={(e) => setMarkdown(e.target.value)}
-                  className="flex-1 w-full p-4 bg-white border-3 border-black rounded-md focus:outline-none focus:shadow-[4px_4px_0px_0px_black] font-mono text-sm resize-none transition-shadow"
-                  placeholder="Enter your markdown here..."
-                />
-              </div>
-            </div>
-          </div>
+          {/* Library Summary */}
+          {selectedLibraries.length > 0 && (
+            <LibrarySummary
+              libraries={selectedLibraries.map(id =>
+                availableLibraries.find(lib => lib.id === id)!
+              ).filter(Boolean)}
+            />
+          )}
 
-          {/* Output Grid */}
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <label className="text-sm font-bold text-foreground">
-                Output Comparison
+          {/* Quick Compare */}
+          {selectedLibraries.length >= 2 && (
+            <div className="flex items-center gap-2">
+              <label className="text-xs font-bold text-muted-foreground">
+                Quick Compare:
               </label>
+              <div className="flex flex-wrap gap-2">
+                {selectedLibraries.slice(0, 2).map((lib1, i) =>
+                  selectedLibraries.slice(i + 1).map((lib2) => {
+                    const lib1Name = availableLibraries.find(l => l.id === lib1)?.name || lib1;
+                    const lib2Name = availableLibraries.find(l => l.id === lib2)?.name || lib2;
+                    return (
+                      <Button
+                        key={`${lib1}-${lib2}`}
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleCompare(lib1, lib2)}
+                        className="text-xs border-3 border-black shadow-[3px_3px_0px_0px_black] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_black] transition-all bg-yellow-50 hover:bg-yellow-100 font-bold"
+                      >
+                        Compare {lib1Name} vs {lib2Name}
+                      </Button>
+                    );
+                  })
+                )}
+              </div>
             </div>
-            {outputData.length > 0 ? (
-              <div className="space-y-4">
-                <LibrarySummary
-                  libraries={outputData.map(item => item.library)}
-                />
-                <OutputGrid
-                  outputs={outputData}
-                  libraryOptions={libraryOptions}
-                  onShowAST={handleShowAST}
-                  onShowSettings={handleShowSettings}
-                />
-              </div>
-            ) : (
-              <div className="bg-white rounded-md border-4 border-black shadow-[8px_8px_0px_0px_black] p-12 text-center">
-                <div className="max-w-md mx-auto">
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-md bg-muted border-3 border-black flex items-center justify-center">
-                    <FileText className="w-8 h-8 text-muted-foreground" />
-                  </div>
-                  <h3 className="text-lg font-bold text-foreground mb-2">
-                    No Libraries Selected
-                  </h3>
-                  <p className="text-muted-foreground text-sm font-medium mb-4">
-                    Choose one or more libraries above to start comparing markdown output.
-                  </p>
-                  <div className="flex flex-col sm:flex-row gap-2 justify-center">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setSelectedLibraries(['marked', 'markdown-it'])}
-                      className="border-3 border-black shadow-[4px_4px_0px_0px_black]"
-                    >
-                      Try HTML Renderers
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setSelectedLibraries(['remove-markdown', 'remark'])}
-                      className="border-3 border-black shadow-[4px_4px_0px_0px_black]"
-                    >
-                      Try Text Converters
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
+          )}
         </div>
+
+        {/* Dashboard */}
+        {selectedLibraries.length > 0 ? (
+          <DashboardLayout
+            preset={layoutPreset}
+            cards={dashboardCards}
+            onLayoutChange={handleLayoutChange}
+          />
+        ) : (
+          <div className="bg-white rounded-md border-4 border-black shadow-[8px_8px_0px_0px_black] p-12 text-center">
+            <div className="max-w-md mx-auto">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-md bg-muted border-3 border-black flex items-center justify-center">
+                <FileText className="w-8 h-8 text-muted-foreground" />
+              </div>
+              <h3 className="text-lg font-bold text-foreground mb-2">
+                No Libraries Selected
+              </h3>
+              <p className="text-muted-foreground text-sm font-medium mb-4">
+                Choose one or more libraries above to start comparing markdown output.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-2 justify-center">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setSelectedLibraries(['marked', 'markdown-it'])}
+                  className="border-3 border-black shadow-[4px_4px_0px_0px_black]"
+                >
+                  Try HTML Renderers
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setSelectedLibraries(['remove-markdown', 'remark'])}
+                  className="border-3 border-black shadow-[4px_4px_0px_0px_black]"
+                >
+                  Try Text Converters
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* AST Visualizer */}
         <ASTVisualizer
@@ -534,6 +612,22 @@ export default function Index() {
             onSave={(options) => handleSaveSettings(settingsLibraryId, options)}
           />
         )}
+
+        {/* Diff Viewer */}
+        {compareLibraries && (
+          <DiffViewer
+            open={diffViewerOpen}
+            onOpenChange={setDiffViewerOpen}
+            library1Name={availableLibraries.find(lib => lib.id === compareLibraries.lib1)?.name || compareLibraries.lib1}
+            library2Name={availableLibraries.find(lib => lib.id === compareLibraries.lib2)?.name || compareLibraries.lib2}
+            output1={outputs[compareLibraries.lib1]?.output || ''}
+            output2={outputs[compareLibraries.lib2]?.output || ''}
+            isHTML={availableLibraries.find(lib => lib.id === compareLibraries.lib1)?.category === 'renderer'}
+          />
+        )}
+
+        {/* Guided Tour */}
+        <GuidedTour />
 
         {/* Builder CTA */}
         <div className="mt-12">
@@ -566,10 +660,10 @@ export default function Index() {
 
       {/* Footer */}
       <footer className="mt-12 border-t-4 border-black bg-white shadow-[0_-4px_0px_0px_black]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-3">
             <p className="text-xs text-muted-foreground font-medium">
-              The Regex101 but for Markdown - Compare and test markdown libraries
+              The Regex101 but for Markdown - Interactive Dashboard Edition
             </p>
             <div className="flex items-center gap-2">
               <a
