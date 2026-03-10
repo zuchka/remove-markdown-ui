@@ -631,10 +631,10 @@ export default function Index() {
 
         {/* Builder CTA */}
         <div className="mt-12">
-          <div className="bg-primary rounded-md border-4 border-black p-8 md:p-10 shadow-[12px_12px_0px_0px_black]">
+          <div className="glass-card bg-gradient-primary p-8 md:p-10">
             <div className="max-w-3xl mx-auto text-center">
-              <div className="inline-flex items-center justify-center w-14 h-14 rounded-md bg-white border-3 border-black mb-4 shadow-[4px_4px_0px_0px_black]">
-                <Zap className="w-7 h-7 text-black" />
+              <div className="inline-flex items-center justify-center w-14 h-14 rounded-lg bg-white/20 backdrop-blur-sm mb-4 shadow-glow">
+                <Zap className="w-7 h-7 text-white" />
               </div>
               <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
                 Made with Builder
@@ -647,7 +647,7 @@ export default function Index() {
                   href="https://www.builder.io?utm_source=tool&utm_content=md"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-black border-3 border-black rounded-md shadow-[6px_6px_0px_0px_black] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[3px_3px_0px_0px_black] active:translate-x-[6px] active:translate-y-[6px] active:shadow-none transition-all font-bold text-sm group"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-primary rounded-lg shadow-glass hover:shadow-glass-lg hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0 transition-all duration-300 font-bold text-sm group border border-white/20"
                 >
                   Start Building for Free
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -659,7 +659,7 @@ export default function Index() {
       </main>
 
       {/* Footer */}
-      <footer className="mt-12 border-t-4 border-black bg-white shadow-[0_-4px_0px_0px_black]">
+      <footer className="mt-12 border-t border-glass-border glass-surface-elevated backdrop-blur-lg">
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-3">
             <p className="text-xs text-muted-foreground font-medium">
