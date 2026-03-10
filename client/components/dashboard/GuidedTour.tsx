@@ -75,15 +75,15 @@ export function GuidedTour() {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
       <div className={cn(
-        "relative w-full max-w-lg bg-white rounded-md border-4 border-black shadow-[12px_12px_0px_0px_black]",
+        "relative w-full max-w-lg glass-card",
         "animate-in fade-in slide-in-from-bottom-4 duration-300"
       )}>
         {/* Header */}
-        <div className="bg-primary border-b-4 border-black px-6 py-4">
+        <div className="bg-gradient-primary border-b border-glass-border-strong px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-md bg-white border-3 border-black shadow-[3px_3px_0px_0px_black] flex items-center justify-center">
-                <Sparkles className="w-5 h-5 text-primary" />
+              <div className="w-10 h-10 rounded-lg bg-white/20 backdrop-blur-sm shadow-glow flex items-center justify-center">
+                <Sparkles className="w-5 h-5 text-white" />
               </div>
               <div>
                 <h2 className="text-lg font-bold text-white">
@@ -123,10 +123,10 @@ export function GuidedTour() {
                 key={index}
                 onClick={() => setCurrentStep(index)}
                 className={cn(
-                  "h-2 rounded-full transition-all border-2 border-black",
-                  index === currentStep 
-                    ? "w-8 bg-primary" 
-                    : "w-2 bg-muted hover:bg-muted-foreground/30"
+                  "h-2 rounded-full transition-all duration-300",
+                  index === currentStep
+                    ? "w-8 bg-gradient-primary shadow-glow"
+                    : "w-2 glass-surface backdrop-blur-sm hover:bg-primary/30"
                 )}
                 aria-label={`Go to step ${index + 1}`}
               />
@@ -135,19 +135,18 @@ export function GuidedTour() {
         </div>
 
         {/* Footer */}
-        <div className="border-t-4 border-black p-4 bg-muted/30 flex items-center justify-between">
+        <div className="border-t border-glass-border p-4 glass-surface-elevated backdrop-blur-lg flex items-center justify-between">
           <Button
-            variant="outline"
+            variant="glass"
             size="sm"
             onClick={handleSkip}
-            className="border-3 border-black shadow-[3px_3px_0px_0px_black] font-bold"
           >
             Skip Tour
           </Button>
           <Button
+            variant="default"
             size="sm"
             onClick={handleNext}
-            className="border-3 border-black shadow-[4px_4px_0px_0px_black] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_black] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all font-bold"
           >
             {isLastStep ? (
               <>

@@ -51,7 +51,7 @@ export function DiffViewer({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-6xl max-h-[90vh] p-0 gap-0 border-4 border-black shadow-[12px_12px_0px_0px_black]">
+      <DialogContent className="max-w-6xl max-h-[90vh] p-0 gap-0 glass-card">
         <DialogHeader className="p-6 pb-0">
           <div className="flex items-center justify-between">
             <div className="flex-1">
@@ -64,26 +64,26 @@ export function DiffViewer({
             </div>
             
             <div className="flex items-center gap-2">
-              <div className="flex border-3 border-black rounded-md overflow-hidden">
+              <div className="flex glass-surface backdrop-blur-md border border-glass-border rounded-lg overflow-hidden">
                 <button
                   onClick={() => setViewMode('side-by-side')}
                   className={cn(
-                    "px-3 py-1.5 text-xs font-bold transition-colors",
+                    "px-3 py-1.5 text-xs font-semibold transition-all duration-300",
                     viewMode === 'side-by-side'
-                      ? "bg-primary text-white"
-                      : "bg-white text-foreground hover:bg-accent"
+                      ? "bg-gradient-primary text-white shadow-glow"
+                      : "bg-transparent text-foreground hover:bg-white/30"
                   )}
                 >
                   Side-by-Side
                 </button>
-                <div className="w-px bg-black" />
+                <div className="w-px bg-glass-border" />
                 <button
                   onClick={() => setViewMode('unified')}
                   className={cn(
-                    "px-3 py-1.5 text-xs font-bold transition-colors",
+                    "px-3 py-1.5 text-xs font-semibold transition-all duration-300",
                     viewMode === 'unified'
-                      ? "bg-primary text-white"
-                      : "bg-white text-foreground hover:bg-accent"
+                      ? "bg-gradient-primary text-white shadow-glow"
+                      : "bg-transparent text-foreground hover:bg-white/30"
                   )}
                 >
                   Unified
@@ -94,11 +94,11 @@ export function DiffViewer({
 
           {/* Status Badge */}
           {diff.identical ? (
-            <Badge className="mt-3 border-3 border-black bg-green-100 text-green-900 font-bold">
+            <Badge variant="secondary" className="mt-3 bg-green-400/10 text-green-700 border border-green-400/30">
               ✓ Outputs are identical
             </Badge>
           ) : (
-            <Badge className="mt-3 border-3 border-black bg-yellow-100 text-yellow-900 font-bold">
+            <Badge variant="secondary" className="mt-3 bg-yellow-400/10 text-yellow-700 border border-yellow-400/30">
               ⚠ Outputs differ
             </Badge>
           )}
@@ -110,7 +110,7 @@ export function DiffViewer({
             <div className="grid grid-cols-2 gap-4">
               {/* Left Panel */}
               <div className="flex flex-col h-full">
-                <div className="flex items-center justify-between mb-3 pb-2 border-b-3 border-black">
+                <div className="flex items-center justify-between mb-3 pb-2 border-b border-glass-border">
                   <h3 className="text-sm font-bold text-foreground">
                     {library1Name}
                   </h3>
@@ -127,9 +127,9 @@ export function DiffViewer({
                     )}
                   </Button>
                 </div>
-                <div className="flex-1 overflow-auto bg-muted/30 border-3 border-black rounded-md p-4">
+                <div className="flex-1 overflow-auto glass-surface backdrop-blur-sm border border-glass-border rounded-lg p-4">
                   {isHTML ? (
-                    <div 
+                    <div
                       className="prose prose-sm max-w-none dark:prose-invert"
                       dangerouslySetInnerHTML={{ __html: output1 }}
                     />
@@ -143,7 +143,7 @@ export function DiffViewer({
 
               {/* Right Panel */}
               <div className="flex flex-col h-full">
-                <div className="flex items-center justify-between mb-3 pb-2 border-b-3 border-black">
+                <div className="flex items-center justify-between mb-3 pb-2 border-b border-glass-border">
                   <h3 className="text-sm font-bold text-foreground">
                     {library2Name}
                   </h3>
@@ -160,9 +160,9 @@ export function DiffViewer({
                     )}
                   </Button>
                 </div>
-                <div className="flex-1 overflow-auto bg-muted/30 border-3 border-black rounded-md p-4">
+                <div className="flex-1 overflow-auto glass-surface backdrop-blur-sm border border-glass-border rounded-lg p-4">
                   {isHTML ? (
-                    <div 
+                    <div
                       className="prose prose-sm max-w-none dark:prose-invert"
                       dangerouslySetInnerHTML={{ __html: output2 }}
                     />
@@ -177,12 +177,12 @@ export function DiffViewer({
           ) : (
             // Unified View
             <div className="space-y-4">
-              <div className="bg-green-50 border-3 border-green-500 rounded-md p-4">
+              <div className="glass-surface backdrop-blur-md border-l-4 border-l-green-400/40 border border-glass-border rounded-lg p-4">
                 <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-sm font-bold text-green-900">
+                  <h3 className="text-sm font-bold text-green-700">
                     {library1Name}
                   </h3>
-                  <Badge className="border-2 border-green-700 bg-green-100 text-green-900 font-bold text-xs">
+                  <Badge variant="secondary" className="bg-green-400/20 text-green-700 border border-green-400/30 text-xs">
                     Library 1
                   </Badge>
                 </div>
@@ -198,12 +198,12 @@ export function DiffViewer({
                 )}
               </div>
 
-              <div className="bg-blue-50 border-3 border-blue-500 rounded-md p-4">
+              <div className="glass-surface backdrop-blur-md border-l-4 border-l-blue-400/40 border border-glass-border rounded-lg p-4">
                 <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-sm font-bold text-blue-900">
+                  <h3 className="text-sm font-bold text-blue-700">
                     {library2Name}
                   </h3>
-                  <Badge className="border-2 border-blue-700 bg-blue-100 text-blue-900 font-bold text-xs">
+                  <Badge variant="secondary" className="bg-blue-400/20 text-blue-700 border border-blue-400/30 text-xs">
                     Library 2
                   </Badge>
                 </div>
@@ -223,17 +223,16 @@ export function DiffViewer({
         </div>
 
         {/* Footer */}
-        <div className="border-t-4 border-black p-4 bg-muted/50">
+        <div className="border-t border-glass-border p-4 glass-surface-elevated backdrop-blur-lg">
           <div className="flex items-center justify-between text-xs text-muted-foreground">
             <div>
               <span className="font-semibold">Stats:</span>{' '}
               {library1Name}: {output1.length} chars | {library2Name}: {output2.length} chars
             </div>
             <Button
-              variant="outline"
+              variant="glass"
               size="sm"
               onClick={() => onOpenChange(false)}
-              className="border-3 border-black shadow-[3px_3px_0px_0px_black]"
             >
               Close
             </Button>

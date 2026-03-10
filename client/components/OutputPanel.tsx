@@ -46,28 +46,29 @@ export function OutputPanel({
 
   return (
     <div className={cn(
-      "bg-white rounded-md border-4 border-black shadow-[8px_8px_0px_0px_black] overflow-hidden flex flex-col h-[350px]",
-      "border-l-[6px]",
-      isHTMLRenderer ? "neo-border-category-html" : "neo-border-category-text"
+      "glass-card overflow-hidden flex flex-col h-[350px]",
+      "border-l-4",
+      isHTMLRenderer ? "glass-border-category-html" : "glass-border-category-text"
     )}>
       {/* Header */}
-      <div className="bg-muted border-b-4 border-black px-4 py-3">
+      <div className="glass-surface-elevated backdrop-blur-lg border-b border-glass-border px-4 py-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 flex-wrap">
             <div className="flex items-center gap-1.5">
-              <div className="w-2 h-2 rounded-full bg-blue-500 border-2 border-black"></div>
-              <div className="w-2 h-2 rounded-full bg-accent border-2 border-black"></div>
-              <div className="w-2 h-2 rounded-full bg-destructive border-2 border-black"></div>
+              <div className="w-2 h-2 rounded-full bg-blue-500 shadow-soft"></div>
+              <div className="w-2 h-2 rounded-full bg-accent shadow-soft"></div>
+              <div className="w-2 h-2 rounded-full bg-destructive shadow-soft"></div>
             </div>
             <span className="ml-2 text-sm font-bold text-foreground">
               {library.name}
             </span>
             <Badge
+              variant="secondary"
               className={cn(
-                "text-xs font-bold border-3 border-black shadow-[3px_3px_0px_0px_black]",
+                "text-xs",
                 isHTMLRenderer
-                  ? "neo-bg-category-html"
-                  : "neo-bg-category-text"
+                  ? "glass-category-html"
+                  : "glass-category-text"
               )}
             >
               {isHTMLRenderer ? (
@@ -83,7 +84,7 @@ export function OutputPanel({
               )}
             </Badge>
             {library.supportsAST && (
-              <Badge variant="secondary" className="text-xs border-3 border-black shadow-[3px_3px_0px_0px_black] bg-purple-100 text-purple-900 font-bold">
+              <Badge variant="gradient" className="text-xs">
                 <Sparkles className="w-3 h-3 mr-1" />
                 AST
               </Badge>
@@ -143,9 +144,9 @@ export function OutputPanel({
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-auto p-4 bg-white">
+      <div className="flex-1 overflow-auto p-4 bg-transparent">
         {error ? (
-          <div className="bg-destructive/10 border-3 border-black rounded-md p-4 shadow-[4px_4px_0px_0px_black]">
+          <div className="glass-surface backdrop-blur-sm border border-destructive/30 rounded-lg p-4 bg-destructive/5">
             <p className="text-sm text-destructive font-bold">Error:</p>
             <p className="text-sm text-destructive mt-1 font-medium">{error}</p>
           </div>
@@ -163,7 +164,7 @@ export function OutputPanel({
         ) : (
           <div className="flex items-center justify-center h-full text-center text-muted-foreground py-8">
             <div>
-              <div className="w-12 h-12 mx-auto mb-2 rounded-md bg-muted/50 border-2 border-dashed border-muted-foreground/20 flex items-center justify-center">
+              <div className="w-12 h-12 mx-auto mb-2 rounded-lg glass-surface backdrop-blur-sm border border-dashed border-glass-border flex items-center justify-center">
                 <FileText className="w-6 h-6 opacity-40" />
               </div>
               <p className="text-xs font-medium">Processing...</p>

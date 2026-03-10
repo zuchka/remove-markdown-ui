@@ -81,7 +81,7 @@ export function LibrarySettingsDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md border-4 border-black shadow-[12px_12px_0px_0px_black] bg-white">
+      <DialogContent className="max-w-md glass-card">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-xl">
             <Settings2 className="w-5 h-5" />
@@ -106,7 +106,7 @@ export function LibrarySettingsDialog({
                       id={option.key}
                       checked={options[option.key] ?? option.default}
                       onCheckedChange={(checked) => handleOptionChange(option.key, checked)}
-                      className="mt-1 border-3 border-black data-[state=checked]:bg-primary"
+                      className="mt-1"
                     />
                     <div className="flex-1 space-y-1 leading-none">
                       <Label
@@ -129,25 +129,26 @@ export function LibrarySettingsDialog({
         <DialogFooter className="flex justify-between items-center">
           <div className="flex-1">
             {isModified() && (
-              <Badge variant="outline" className="text-xs border-2 border-primary bg-primary/10 text-primary font-bold">
+              <Badge variant="default" className="text-xs">
                 Modified from defaults
               </Badge>
             )}
           </div>
           <div className="flex gap-2">
             <Button
-              variant="outline"
+              variant="glass"
               size="sm"
               onClick={handleReset}
-              className="h-8 border-3 border-black shadow-[4px_4px_0px_0px_black]"
+              className="h-8"
             >
               <RotateCcw className="w-3.5 h-3.5 mr-1.5" />
               Reset
             </Button>
             <Button
+              variant="default"
               size="sm"
               onClick={handleSave}
-              className="h-8 border-3 border-black shadow-[4px_4px_0px_0px_black]"
+              className="h-8"
             >
               Apply Settings
             </Button>

@@ -83,12 +83,27 @@ export default {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+        glass: "var(--radius-glass)",
+        "glass-lg": "var(--radius-glass-lg)",
+        "glass-xl": "var(--radius-glass-xl)",
+      },
+      backdropBlur: {
+        xs: "2px",
+        sm: "4px",
+        md: "12px",
+        lg: "16px",
+        xl: "24px",
       },
       boxShadow: {
         sm: "var(--shadow-sm)",
         DEFAULT: "var(--shadow-base)",
         lg: "var(--shadow-lg)",
         xl: "var(--shadow-xl)",
+        soft: "var(--shadow-soft)",
+        glass: "var(--shadow-glass)",
+        "glass-lg": "var(--shadow-glass-lg)",
+        glow: "var(--shadow-glow)",
+        "glow-strong": "var(--shadow-glow-strong)",
       },
       keyframes: {
         "accordion-down": {

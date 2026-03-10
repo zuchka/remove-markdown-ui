@@ -421,11 +421,11 @@ export default function Index() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b-4 border-black bg-white shadow-[0_4px_0px_0px_black] sticky top-0 z-10">
+      <header className="glass-surface-elevated backdrop-blur-lg border-b border-glass-border-strong shadow-glass sticky top-0 z-10">
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <div className="flex items-center justify-between flex-wrap gap-3">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-md bg-primary border-3 border-black shadow-[4px_4px_0px_0px_black] flex items-center justify-center">
+              <div className="w-10 h-10 rounded-lg bg-gradient-primary shadow-glow flex items-center justify-center">
                 <FileText className="w-5 h-5 text-white" />
               </div>
               <div>
@@ -477,11 +477,11 @@ export default function Index() {
       {/* Main Content */}
       <main className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Info Banner */}
-        <div className="mb-6 neo-bg-yellow border-3 border-black rounded-md p-3 shadow-[6px_6px_0px_0px_black]">
+        <div className="mb-6 glass-card p-4">
           <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-black flex-shrink-0" />
-            <p className="text-xs text-foreground font-semibold">
-              🎉 <strong>New Dashboard UI!</strong> Drag, resize, and arrange cards. Try layout presets below!
+            <Sparkles className="w-4 h-4 text-primary flex-shrink-0" />
+            <p className="text-sm text-foreground font-semibold">
+              🎉 <strong>New Glassmorphism UI!</strong> Drag, resize, and arrange cards. Try layout presets below!
             </p>
           </div>
         </div>

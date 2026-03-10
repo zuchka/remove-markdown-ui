@@ -18,14 +18,14 @@ interface DockPanelProps {
   className?: string;
 }
 
-// Color mapping for different card types (same as DraggableCard)
+// Color mapping for different card types with gradients
 const cardColors: Record<CardType, string> = {
-  'input': 'bg-blue-500',
-  'output': 'bg-green-500',
-  'test-cases': 'bg-yellow-500',
-  'cheat-sheet': 'bg-purple-500',
-  'ast': 'bg-pink-500',
-  'settings': 'bg-orange-500',
+  'input': 'bg-gradient-to-r from-blue-400 to-blue-500',
+  'output': 'bg-gradient-to-r from-green-400 to-green-500',
+  'test-cases': 'bg-gradient-to-r from-yellow-400 to-yellow-500',
+  'cheat-sheet': 'bg-gradient-to-r from-purple-400 to-purple-500',
+  'ast': 'bg-gradient-to-r from-pink-400 to-pink-500',
+  'settings': 'bg-gradient-to-r from-orange-400 to-orange-500',
 };
 
 export function DockPanel({ 
@@ -40,9 +40,9 @@ export function DockPanel({
   
   return (
     <div className={cn(
-      "bg-muted border-4 border-black shadow-[4px_4px_0px_0px_black] p-2",
-      isHorizontal 
-        ? "flex flex-row gap-2 overflow-x-auto" 
+      "glass-surface-elevated backdrop-blur-lg border border-glass-border shadow-glass p-2 rounded-glass",
+      isHorizontal
+        ? "flex flex-row gap-2 overflow-x-auto"
         : "flex flex-col gap-2 overflow-y-auto",
       className
     )}>
@@ -60,17 +60,17 @@ export function DockPanel({
             <button
               onClick={() => onRestore(item.id)}
               className={cn(
-                "flex items-center gap-2 px-3 py-2 rounded-md border-3 border-black",
-                "shadow-[3px_3px_0px_0px_black]",
-                "hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_black]",
-                "active:translate-x-[3px] active:translate-y-[3px] active:shadow-none",
-                "transition-all bg-white text-left",
+                "flex items-center gap-2 px-3 py-2 rounded-lg glass-surface backdrop-blur-sm",
+                "border border-glass-border shadow-soft",
+                "hover:-translate-y-0.5 hover:shadow-glass hover:border-glass-border-strong",
+                "active:scale-[0.98] active:translate-y-0",
+                "transition-all duration-300 text-left",
                 isHorizontal ? "min-w-[120px]" : "w-full"
               )}
               title={`Restore ${item.title}`}
             >
               <div className={cn(
-                "w-2 h-2 rounded-full border-2 border-black flex-shrink-0",
+                "w-2 h-2 rounded-full shadow-soft flex-shrink-0",
                 colorClass
               )} />
               

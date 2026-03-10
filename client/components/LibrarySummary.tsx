@@ -19,29 +19,29 @@ export function LibrarySummary({ libraries, className }: LibrarySummaryProps) {
 
   return (
     <div className={cn(
-      "flex items-center gap-3 px-4 py-2 bg-muted border-3 border-black rounded-md shadow-[4px_4px_0px_0px_black]",
+      "flex items-center gap-3 px-4 py-2 glass-card",
       className
     )}>
       <span className="text-sm font-bold text-foreground">
         Selected: {total} {total === 1 ? 'library' : 'libraries'}
       </span>
-      
+
       {htmlCount > 0 && (
-        <Badge className="neo-bg-category-html border-3 border-black shadow-[2px_2px_0px_0px_black] text-xs font-bold">
+        <Badge className="glass-category-html text-xs">
           <CodeXml className="w-3.5 h-3.5 mr-1" />
           {htmlCount} HTML {htmlCount === 1 ? 'Renderer' : 'Renderers'}
         </Badge>
       )}
-      
+
       {textCount > 0 && (
-        <Badge className="neo-bg-category-text border-3 border-black shadow-[2px_2px_0px_0px_black] text-xs font-bold">
+        <Badge className="glass-category-text text-xs">
           <FileType className="w-3.5 h-3.5 mr-1" />
           {textCount} Text {textCount === 1 ? 'Converter' : 'Converters'}
         </Badge>
       )}
-      
+
       {htmlCount > 0 && textCount > 0 && (
-        <Badge variant="outline" className="text-xs border-2 border-purple-300 bg-purple-50 text-purple-700 font-bold">
+        <Badge variant="secondary" className="text-xs bg-purple-400/10 text-purple-700 border border-purple-400/30">
           Mixed comparison
         </Badge>
       )}

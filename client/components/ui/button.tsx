@@ -5,27 +5,29 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold border-3 border-black transition-all duration-150 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-semibold transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
-        default: 
-          "bg-primary text-primary-foreground shadow-[4px_4px_0px_0px_black] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_black] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none",
-        destructive:
-          "bg-destructive text-destructive-foreground shadow-[4px_4px_0px_0px_black] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_black] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none",
+        default:
+          "bg-gradient-primary text-white shadow-glass shadow-glow hover:shadow-glass-lg hover:shadow-glow-strong hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0 border-0",
+        glass:
+          "glass-surface backdrop-blur-md border border-glass-border shadow-glass hover:glass-surface-elevated hover:shadow-glass-lg hover:border-glass-border-strong hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0",
         outline:
-          "border-3 border-black bg-background hover:bg-accent hover:text-accent-foreground shadow-[4px_4px_0px_0px_black] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_black] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none",
+          "border border-border bg-transparent hover:glass-surface hover:backdrop-blur-sm hover:shadow-soft hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0",
+        destructive:
+          "bg-destructive text-destructive-foreground shadow-glass hover:shadow-glass-lg hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0 border-0",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-muted shadow-[4px_4px_0px_0px_black] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_black] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none",
-        ghost: 
-          "border-transparent hover:bg-accent hover:text-accent-foreground hover:border-black hover:shadow-[2px_2px_0px_0px_black]",
-        link: 
-          "text-primary underline-offset-4 hover:underline border-transparent",
+          "glass-surface-elevated backdrop-blur-lg text-foreground shadow-soft hover:shadow-glass hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0 border border-glass-border",
+        ghost:
+          "border-0 hover:glass-surface hover:backdrop-blur-sm hover:shadow-soft",
+        link:
+          "text-primary underline-offset-4 hover:underline border-0 shadow-none",
       },
       size: {
         default: "h-10 px-4 py-2",
-        sm: "h-9 rounded-md px-3",
-        lg: "h-11 rounded-md px-8",
+        sm: "h-9 rounded-lg px-3 text-xs",
+        lg: "h-12 rounded-xl px-8 text-base",
         icon: "h-10 w-10",
       },
     },

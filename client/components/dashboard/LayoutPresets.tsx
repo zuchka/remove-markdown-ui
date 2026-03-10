@@ -52,7 +52,7 @@ export function LayoutPresets({ currentPreset, onChange, className }: LayoutPres
           Layout Mode
         </label>
         {currentPreset === 'custom' && (
-          <Badge variant="secondary" className="text-xs border-2 border-black font-bold">
+          <Badge variant="gradient" className="text-xs">
             Custom Layout Active
           </Badge>
         )}
@@ -68,18 +68,16 @@ export function LayoutPresets({ currentPreset, onChange, className }: LayoutPres
               key={preset.id}
               onClick={() => onChange(preset.id)}
               className={cn(
-                "relative p-4 rounded-md border-3 border-black shadow-[4px_4px_0px_0px_black]",
-                "hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_black]",
-                "active:translate-x-[4px] active:translate-y-[4px] active:shadow-none",
-                "transition-all text-left",
-                isActive 
-                  ? "bg-primary border-primary shadow-[4px_4px_0px_0px_rgb(0,0,0)]" 
-                  : "bg-white hover:bg-accent/50"
+                "relative p-4 rounded-lg border transition-all duration-300 text-left",
+                "hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0",
+                isActive
+                  ? "bg-gradient-primary border-0 shadow-glass shadow-glow"
+                  : "glass-surface backdrop-blur-md border-glass-border shadow-soft hover:glass-surface-elevated hover:shadow-glass hover:border-glass-border-strong"
               )}
             >
               {preset.recommended && !isActive && (
                 <div className="absolute -top-2 -right-2 z-10">
-                  <Badge className="bg-yellow-400 text-black border-2 border-black text-xs font-bold shadow-[2px_2px_0px_0px_black]">
+                  <Badge variant="gradient" className="text-xs shadow-glow">
                     ⭐ Recommended
                   </Badge>
                 </div>
@@ -87,8 +85,8 @@ export function LayoutPresets({ currentPreset, onChange, className }: LayoutPres
               
               <div className="flex items-start gap-3">
                 <div className={cn(
-                  "w-10 h-10 rounded-md border-3 border-black shadow-[3px_3px_0px_0px_black] flex items-center justify-center flex-shrink-0",
-                  isActive ? "bg-white" : "bg-accent"
+                  "w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 shadow-soft",
+                  isActive ? "bg-white/20 backdrop-blur-sm" : "glass-surface backdrop-blur-sm border border-glass-border"
                 )}>
                   <Icon className={cn(
                     "w-5 h-5",
