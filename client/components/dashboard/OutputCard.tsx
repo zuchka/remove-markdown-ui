@@ -37,17 +37,17 @@ export function OutputCard({
   const isHTMLRenderer = library.category === 'renderer';
 
   return (
-    <div className="h-full flex flex-col bg-white">
+    <div className="h-full flex flex-col">
       {/* Stats Header */}
-      <div className="px-4 py-2 border-b-3 border-black bg-muted/50">
+      <div className="px-4 py-2 border-b border-glass-border glass-surface-elevated backdrop-blur-lg">
         <div className="flex items-center justify-between flex-wrap gap-2">
           <div className="flex items-center gap-2">
             <Badge
               className={cn(
-                "text-xs font-bold border-2 border-black",
+                "text-xs",
                 isHTMLRenderer
-                  ? "bg-green-100 text-green-900"
-                  : "bg-blue-100 text-blue-900"
+                  ? "glass-category-html"
+                  : "glass-category-text"
               )}
             >
               {isHTMLRenderer ? (
@@ -63,7 +63,7 @@ export function OutputCard({
               )}
             </Badge>
             {library.supportsAST && (
-              <Badge variant="secondary" className="text-xs border-2 border-black bg-purple-100 text-purple-900 font-bold">
+              <Badge variant="gradient" className="text-xs">
                 <Sparkles className="w-3 h-3 mr-1" />
                 AST
               </Badge>
@@ -127,7 +127,7 @@ export function OutputCard({
       {/* Content */}
       <div className="flex-1 overflow-auto p-4">
         {error ? (
-          <div className="bg-destructive/10 border-3 border-black rounded-md p-4 shadow-[4px_4px_0px_0px_black]">
+          <div className="glass-surface backdrop-blur-sm border border-destructive/30 rounded-lg p-4 bg-destructive/5">
             <p className="text-sm text-destructive font-bold">Error:</p>
             <p className="text-sm text-destructive mt-1 font-medium">{error}</p>
           </div>

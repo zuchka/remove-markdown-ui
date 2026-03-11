@@ -21,13 +21,9 @@ import { Button } from "@/components/ui/button";
 // Dashboard components
 import {
   DashboardLayout,
-  LayoutPresets,
   InputEditorCard,
   OutputCard,
   DiffViewer,
-  GuidedTour,
-  type LayoutPresetType,
-  type DashboardLayout as DashboardLayoutType
 } from "@/components/dashboard";
 
 // Import and register all library adapters
@@ -42,8 +38,7 @@ This is the **Regex101 but for Markdown** - test and compare different markdown 
 ## 🚀 Key Features
 
 - **Multi-Library Comparison**: Test up to 4 markdown libraries simultaneously
-- **Dashboard Layout**: Drag, resize, and arrange your workspace
-- **Layout Presets**: Quick layouts for comparison, focus, and analysis
+- **Clean Interface**: Modern glassmorphism design for distraction-free comparison
 - **AST Visualization**: Explore the Abstract Syntax Tree for supported libraries
 - **Test Cases Library**: 20+ pre-built examples to test edge cases
 - **Cheat Sheet**: Quick reference for all markdown syntax
@@ -52,11 +47,11 @@ This is the **Regex101 but for Markdown** - test and compare different markdown 
 
 ## 📝 Getting Started
 
-1. Choose a **Layout Preset** (Compare, Focus, or Analyze)
-2. Select libraries to compare using the library selector
-3. Edit this markdown or click "Test Cases" to load examples
-4. Drag and resize cards to customize your workspace
-5. Click the AST button (✨) on libraries that support it
+1. Select libraries to compare using the library selector
+2. Edit this markdown or click "Test Cases" to load examples
+3. View outputs in the grid below
+4. Click the AST button (✨) on libraries that support it
+5. Use "Compare These" to see side-by-side diffs
 
 ### Supported Libraries (7 total)
 
@@ -149,8 +144,7 @@ export default function Index() {
   const [settingsDialogOpen, setSettingsDialogOpen] = useState(false);
   const [settingsLibraryId, setSettingsLibraryId] = useState<string>('');
   
-  // Dashboard layout state
-  const [layoutPreset, setLayoutPreset] = useState<LayoutPresetType>('compare');
+  // No layout state needed - using static grid
 
   // Comparison state
   const [diffViewerOpen, setDiffViewerOpen] = useState(false);
@@ -299,7 +293,6 @@ export default function Index() {
     setComparisonMode('html');
     setSelectedLibraries(['marked', 'markdown-it']);
     setLibraryOptions({});
-    setLayoutPreset('compare');
     toast({
       title: "Reset complete",
       description: "Markdown and settings have been reset.",
@@ -349,12 +342,7 @@ export default function Index() {
     });
   }, [toast]);
 
-  const handleLayoutChange = useCallback((layout: DashboardLayoutType) => {
-    // Layout is automatically saved in DashboardLayout component
-    if (layout.preset === 'custom') {
-      setLayoutPreset('custom');
-    }
-  }, []);
+  // Layout change handler removed - using static grid
 
   const handleCompare = useCallback((lib1Id: string, lib2Id: string) => {
     setCompareLibraries({ lib1: lib1Id, lib2: lib2Id });
@@ -481,17 +469,10 @@ export default function Index() {
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-primary flex-shrink-0" />
             <p className="text-sm text-foreground font-semibold">
-              🎉 <strong>New Glassmorphism UI!</strong> Drag, resize, and arrange cards. Try layout presets below!
+              ✨ <strong>Glassmorphism UI!</strong> Clean, modern interface for comparing markdown libraries.
             </p>
           </div>
         </div>
-
-        {/* Layout Presets */}
-        <LayoutPresets
-          currentPreset={layoutPreset}
-          onChange={setLayoutPreset}
-          className="mb-6"
-        />
 
         {/* Controls Section */}
         <div className="space-y-4 mb-6">
@@ -555,9 +536,7 @@ export default function Index() {
         {/* Dashboard */}
         {selectedLibraries.length > 0 ? (
           <DashboardLayout
-            preset={layoutPreset}
             cards={dashboardCards}
-            onLayoutChange={handleLayoutChange}
           />
         ) : (
           <div className="bg-white rounded-md border-4 border-black shadow-[8px_8px_0px_0px_black] p-12 text-center">
@@ -626,8 +605,6 @@ export default function Index() {
           />
         )}
 
-        {/* Guided Tour */}
-        <GuidedTour />
 
         {/* Builder CTA */}
         <div className="mt-12">

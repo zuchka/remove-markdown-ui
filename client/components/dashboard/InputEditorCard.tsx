@@ -5,12 +5,12 @@ interface InputEditorCardProps {
 
 export function InputEditorCard({ value, onChange }: InputEditorCardProps) {
   return (
-    <div className="h-full flex flex-col bg-white">
+    <div className="h-full flex flex-col">
       <div className="p-4 flex-1 flex flex-col overflow-hidden">
         <textarea
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="flex-1 w-full p-4 bg-white border-3 border-black rounded-md focus:outline-none focus:shadow-[4px_4px_0px_0px_black] font-mono text-sm resize-none transition-shadow"
+          className="flex-1 w-full p-4 glass-surface backdrop-blur-sm border border-glass-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/30 font-mono text-sm resize-none transition-all duration-300"
           placeholder="Enter your markdown here..."
         />
       </div>
