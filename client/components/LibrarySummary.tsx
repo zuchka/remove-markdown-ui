@@ -19,24 +19,24 @@ export function LibrarySummary({ libraries, className }: LibrarySummaryProps) {
 
   return (
     <div className={cn(
-      "flex items-center gap-3 px-4 py-2 glass-card",
+      "flex items-center gap-2 px-3 py-1.5 glass-card",
       className
     )}>
-      <span className="text-sm font-bold text-foreground">
+      <span className="text-xs font-bold text-foreground">
         Selected: {total} {total === 1 ? 'library' : 'libraries'}
       </span>
 
       {htmlCount > 0 && (
-        <Badge className="glass-category-html text-xs">
-          <CodeXml className="w-3.5 h-3.5 mr-1" />
-          {htmlCount} HTML {htmlCount === 1 ? 'Renderer' : 'Renderers'}
+        <Badge className="glass-category-html text-xs px-2 py-0.5">
+          <CodeXml className="w-3 h-3 mr-1" />
+          {htmlCount} HTML
         </Badge>
       )}
 
       {textCount > 0 && (
-        <Badge className="glass-category-text text-xs">
-          <FileType className="w-3.5 h-3.5 mr-1" />
-          {textCount} Text {textCount === 1 ? 'Converter' : 'Converters'}
+        <Badge className="glass-category-text text-xs px-2 py-0.5">
+          <FileType className="w-3 h-3 mr-1" />
+          {textCount} Text
         </Badge>
       )}
 

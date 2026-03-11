@@ -408,19 +408,16 @@ export default function Index() {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="glass-surface-elevated backdrop-blur-lg border-b border-glass-border-strong shadow-glass sticky top-0 z-10">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-3">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-2">
           <div className="flex items-center justify-between flex-wrap gap-3">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-gradient-primary shadow-glow flex items-center justify-center">
                 <FileText className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h1 className="text-lg font-bold text-foreground">
+                <h1 className="text-base font-bold text-foreground">
                   Markdown Playground
                 </h1>
-                <p className="text-xs text-muted-foreground font-medium">
-                  Interactive Dashboard • Drag & Resize
-                </p>
               </div>
             </div>
             
@@ -461,19 +458,19 @@ export default function Index() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <main className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-3">
         {/* Info Banner */}
-        <div className="mb-6 glass-card p-4">
+        <div className="mb-3 glass-card px-4 py-2">
           <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-primary flex-shrink-0" />
-            <p className="text-sm text-foreground font-semibold">
+            <Sparkles className="w-3.5 h-3.5 text-primary flex-shrink-0" />
+            <p className="text-xs text-foreground font-semibold">
               ✨ <strong>Glassmorphism UI!</strong> Clean, modern interface for comparing markdown libraries.
             </p>
           </div>
         </div>
 
         {/* Controls Section */}
-        <div className="space-y-4 mb-6">
+        <div className="space-y-3 mb-4">
           {/* Comparison Mode */}
           <ComparisonModeSelector
             mode={comparisonMode}
@@ -482,8 +479,8 @@ export default function Index() {
 
           {/* Library Selector */}
           <div>
-            <label className="block text-sm font-bold text-foreground mb-2">
-              Select Libraries to Compare (up to 4)
+            <label className="block text-xs font-bold text-foreground mb-1.5">
+              Select Libraries (up to 4)
             </label>
             <LibrarySelector
               libraries={filteredLibraries}

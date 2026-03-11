@@ -63,7 +63,7 @@ export function LibrarySelector({
           variant="glass"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between h-auto min-h-[48px] py-3 px-4"
+          className="w-full justify-between h-auto min-h-[40px] py-2 px-3"
         >
           <div className="flex flex-wrap gap-2 flex-1 items-center">
             {selectedLibraries.length === 0 ? (
