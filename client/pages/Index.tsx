@@ -498,34 +498,6 @@ export default function Index() {
               ).filter(Boolean)}
             />
           )}
-
-          {/* Quick Compare */}
-          {selectedLibraries.length >= 2 && (
-            <div className="flex items-center gap-2">
-              <label className="text-xs font-bold text-muted-foreground">
-                Quick Compare:
-              </label>
-              <div className="flex flex-wrap gap-2">
-                {selectedLibraries.slice(0, 2).map((lib1, i) =>
-                  selectedLibraries.slice(i + 1).map((lib2) => {
-                    const lib1Name = availableLibraries.find(l => l.id === lib1)?.name || lib1;
-                    const lib2Name = availableLibraries.find(l => l.id === lib2)?.name || lib2;
-                    return (
-                      <Button
-                        key={`${lib1}-${lib2}`}
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleCompare(lib1, lib2)}
-                        className="text-xs border-3 border-black shadow-[3px_3px_0px_0px_black] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_black] transition-all bg-yellow-50 hover:bg-yellow-100 font-bold"
-                      >
-                        Compare {lib1Name} vs {lib2Name}
-                      </Button>
-                    );
-                  })
-                )}
-              </div>
-            </div>
-          )}
         </div>
 
         {/* Dashboard */}
