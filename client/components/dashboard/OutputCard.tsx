@@ -37,11 +37,18 @@ export function OutputCard({
   const isHTMLRenderer = library.category === 'renderer';
 
   return (
-    <div className="h-full flex flex-col">
+    <div className={cn(
+      "glass-card overflow-hidden flex flex-col min-h-[350px]",
+      "border-l-4",
+      isHTMLRenderer ? "glass-border-category-html" : "glass-border-category-text"
+    )}>
       {/* Stats Header */}
       <div className="px-4 py-2 border-b border-glass-border glass-surface-elevated backdrop-blur-lg">
         <div className="flex items-center justify-between flex-wrap gap-2">
           <div className="flex items-center gap-2">
+            <span className="text-sm font-bold text-foreground">
+              {library.name}
+            </span>
             <Badge
               className={cn(
                 "text-xs",

@@ -116,14 +116,12 @@ function greet(name) {
 ---
 
 > **Pro Tips:**
-> - Try the **Layout Presets** to optimize your workspace
-> - **Drag** cards to rearrange them
-> - **Resize** cards by dragging edges
-> - **Minimize** cards to the dock when not needed
 > - Use **Test Cases** to load edge case examples
 > - Click the **✨ AST** badge to visualize parse trees
 > - **Share** your setup with a unique URL
-> - Compare how different libraries handle the same markdown!
+> - Compare outputs to see how different libraries handle the same markdown
+> - Toggle between **HTML Renderers** and **Text Converters**
+> - Check **Performance Metrics** to see processing times
 
 Made with ❤️ using [Builder.io](https://www.builder.io)`;
 

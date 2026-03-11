@@ -38,7 +38,7 @@ export function Card({
     <div
       className={cn(
         "glass-card overflow-hidden flex flex-col",
-        type === 'input' ? 'min-h-[400px]' : 'min-h-[350px]',
+        type === 'input' ? 'min-h-[500px] h-[500px]' : 'min-h-[350px]',
         colors.border,
         className
       )}
