@@ -20,14 +20,14 @@ const presets: Array<{
   {
     id: 'compare',
     name: 'Compare',
-    description: 'Input left, outputs grid right - optimized for side-by-side comparison',
+    description: 'Input on top, outputs grid below - optimized for comparing multiple libraries',
     icon: LayoutGrid,
     recommended: true,
   },
   {
     id: 'focus',
     name: 'Focus',
-    description: 'Large input, outputs below - best for editing and writing',
+    description: 'Extra large input area - best for focused writing and editing',
     icon: Focus,
   },
   {

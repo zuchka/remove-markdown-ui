@@ -16,22 +16,22 @@ export interface DashboardLayout {
 
 // Default layouts for each preset
 export const PRESET_LAYOUTS: Record<LayoutPresetType, Layout[]> = {
-  // Compare Mode: Input left (30%), Outputs grid right (70%)
+  // Compare Mode: Full-width input on top, outputs grid below
   compare: [
-    { i: 'input', x: 0, y: 0, w: 4, h: 4, minW: 2, minH: 3 },
-    { i: 'output-0', x: 4, y: 0, w: 4, h: 2, minW: 2, minH: 2 },
-    { i: 'output-1', x: 8, y: 0, w: 4, h: 2, minW: 2, minH: 2 },
-    { i: 'output-2', x: 4, y: 2, w: 4, h: 2, minW: 2, minH: 2 },
-    { i: 'output-3', x: 8, y: 2, w: 4, h: 2, minW: 2, minH: 2 },
-  ],
-  
-  // Focus Mode: Large input, outputs stacked below
-  focus: [
     { i: 'input', x: 0, y: 0, w: 12, h: 3, minW: 6, minH: 2 },
     { i: 'output-0', x: 0, y: 3, w: 6, h: 2, minW: 3, minH: 2 },
     { i: 'output-1', x: 6, y: 3, w: 6, h: 2, minW: 3, minH: 2 },
     { i: 'output-2', x: 0, y: 5, w: 6, h: 2, minW: 3, minH: 2 },
     { i: 'output-3', x: 6, y: 5, w: 6, h: 2, minW: 3, minH: 2 },
+  ],
+  
+  // Focus Mode: Extra large input for writing, compact outputs below
+  focus: [
+    { i: 'input', x: 0, y: 0, w: 12, h: 4, minW: 6, minH: 3 },
+    { i: 'output-0', x: 0, y: 4, w: 6, h: 2, minW: 3, minH: 2 },
+    { i: 'output-1', x: 6, y: 4, w: 6, h: 2, minW: 3, minH: 2 },
+    { i: 'output-2', x: 0, y: 6, w: 6, h: 2, minW: 3, minH: 2 },
+    { i: 'output-3', x: 6, y: 6, w: 6, h: 2, minW: 3, minH: 2 },
   ],
   
   // Analyze Mode: Input minimized, outputs + AST side-by-side
