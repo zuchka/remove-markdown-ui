@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@types/react-grid-layout':
+        specifier: ^2.1.0
+        version: 2.1.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       commonmark:
         specifier: ^0.31.2
         version: 0.31.2
@@ -35,6 +38,12 @@ importers:
       nanoid:
         specifier: ^5.1.6
         version: 5.1.6
+      react-diff-view:
+        specifier: ^3.3.2
+        version: 3.3.2(react@18.3.1)
+      react-grid-layout:
+        specifier: ^2.2.2
+        version: 2.2.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-json-tree:
         specifier: ^0.20.0
         version: 0.20.0(@types/react@18.3.28)(react@18.3.1)
@@ -1550,6 +1559,10 @@ packages:
     peerDependencies:
       '@types/react': ^18.0.0
 
+  '@types/react-grid-layout@2.1.0':
+    resolution: {integrity: sha512-pHEjVg9ert6BDFHFQ1IEdLUkd2gasJvyti5lV2kE46N/R07ZiaSZpAXeXJAA1MXy/Qby23fZmiuEgZkITxPXug==}
+    deprecated: This is a stub types definition. react-grid-layout provides its own type definitions, so you do not need this installed.
+
   '@types/react-reconciler@0.26.7':
     resolution: {integrity: sha512-mBDYl8x+oyPX/VBb3E638N0B7xG+SPk/EAMcVPeexqus/5aTpTphQi0curhhshOqRrc9t6OPoJfEUkbymse/lQ==}
 
@@ -1770,6 +1783,9 @@ packages:
   class-variance-authority@0.7.1:
     resolution: {integrity: sha512-Ka+9Trutv7G8M6WT6SeiRWz792K5qEqIGEGzXKhAE6xOWAY6pPH8U+9IY3oCMv6kqTmLsv7Xh/2w2RigkePMsg==}
 
+  classnames@2.5.1:
+    resolution: {integrity: sha512-saHYOzhIQs6wy2sVxTM6bUDsQO4F50V9RQ22qBpEdCW+I+/Wmke2HOl6lS6dTpdxVhb88/I6+Hs+438c3lfUow==}
+
   cliui@8.0.1:
     resolution: {integrity: sha512-BSeNnyus75C4//NQ9gQt1/csTXyo/8Sb+afLAkzAptFuMsod9HFokGNudZpi/oQV73hnVK+sR+5PVRMd+Dr7YQ==}
     engines: {node: '>=12'}
@@ -1955,6 +1971,9 @@ packages:
   didyoumean@1.2.2:
     resolution: {integrity: sha512-gxtyfqMg7GKyhQmb056K7M3xszy/myH8w+B4RT+QXBQsvAOdc3XymqDDPHx1BgPgsdAA5SIifona89YtRATDzw==}
 
+  diff-match-patch@1.0.5:
+    resolution: {integrity: sha512-IayShXAgj/QMXgB0IWmKx+rOPuGMhqm5w6jvFxmVenXKIzRqTAAsbBPT3kWQeGANj3jGgvcvv4yK6SxqYmikgw==}
+
   diff@8.0.3:
     resolution: {integrity: sha512-qejHi7bcSD4hQAZE0tNAawRK1ZtafHDmMTMkrrIGgSLl7hTnQHmKCeB45xAcbfTqK2zowkM3j3bHt/4b/ARbYQ==}
     engines: {node: '>=0.3.1'}
@@ -2061,6 +2080,9 @@ packages:
   extend@3.0.2:
     resolution: {integrity: sha512-fjquC59cD7CyW6urNXK0FBufkZcoiGG80wTuPujX590cB5Ttln20E2UB4S/WARVqhXffZl2LNgS+gQdPIIim/g==}
 
+  fast-equals@4.0.3:
+    resolution: {integrity: sha512-G3BSX9cfKttjr+2o1O22tYMLq0DPluZnYtq1rXumE1SpL/F/SLIfHx08WYQoWSIpeMYf8sRbJ8++71+v6Pnxfg==}
+
   fast-equals@5.4.0:
     resolution: {integrity: sha512-jt2DW/aNFNwke7AUd+Z+e6pz39KO5rzdbbFCg2sGafS4mk13MI7Z8O5z9cADNn5lhGODIgLwug6TZO2ctf7kcw==}
     engines: {node: '>=6.0.0'}
@@ -2146,6 +2168,9 @@ packages:
 
   get-tsconfig@4.13.6:
     resolution: {integrity: sha512-shZT/QMiSHc/YBLxxOkMtgSid5HFoauqCE3/exfsEcwg1WkeqjG+V40yBbBrsD+jW2HDXcs28xOfcbm2jI8Ddw==}
+
+  gitdiff-parser@0.3.1:
+    resolution: {integrity: sha512-YQJnY8aew65id8okGxKCksH3efDCJ9HzV7M9rsvd65habf39Pkh4cgYJ27AaoDMqo1X98pgNJhNMrm/kpV7UVQ==}
 
   glob-parent@5.1.2:
     resolution: {integrity: sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow==}
@@ -2740,10 +2765,27 @@ packages:
     peerDependencies:
       react: '>=16.8.0'
 
+  react-diff-view@3.3.2:
+    resolution: {integrity: sha512-wPVq4ktTcGOHbhnWKU/gHLtd3N2Xd+OZ/XQWcKA06dsxlSsESePAumQILwHtiak2nMCMiWcIfBpqZ5OiharUPA==}
+    peerDependencies:
+      react: '>=16.14.0'
+
   react-dom@18.3.1:
     resolution: {integrity: sha512-5m4nQKp+rZRb09LNH59GM4BxTh9251/ylbKIbpe7TpGxfJ+9kv6BLkLBXIjjspbgbnIBNqlI23tRnTWT0snUIw==}
     peerDependencies:
       react: ^18.3.1
+
+  react-draggable@4.5.0:
+    resolution: {integrity: sha512-VC+HBLEZ0XJxnOxVAZsdRi8rD04Iz3SiiKOoYzamjylUcju/hP9np/aZdLHf/7WOD268WMoNJMvYfB5yAK45cw==}
+    peerDependencies:
+      react: '>= 16.3.0'
+      react-dom: '>= 16.3.0'
+
+  react-grid-layout@2.2.2:
+    resolution: {integrity: sha512-yNo9pxQWoxHWRAwHGSVT4DEGELYPyQ7+q9lFclb5jcqeFzva63/2F72CryS/jiTIr/SBIlTaDdyjqH+ODg8oBw==}
+    peerDependencies:
+      react: '>= 16.3.0'
+      react-dom: '>= 16.3.0'
 
   react-hook-form@7.71.2:
     resolution: {integrity: sha512-1CHvcDYzuRUNOflt4MOq3ZM46AronNJtQ1S7tnX6YN4y72qhgiUItpacZUAQ0TyWYci3yz1X+rXaSxiuEm86PA==}
@@ -2800,6 +2842,12 @@ packages:
     peerDependencies:
       react: ^16.14.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc
       react-dom: ^16.14.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc
+
+  react-resizable@3.1.3:
+    resolution: {integrity: sha512-liJBNayhX7qA4tBJiBD321FDhJxgGTJ07uzH5zSORXoE8h7PyEZ8mLqmosST7ppf6C4zUsbd2gzDMmBCfFp9Lw==}
+    peerDependencies:
+      react: '>= 16.3'
+      react-dom: '>= 16.3'
 
   react-router-dom@6.30.3:
     resolution: {integrity: sha512-pxPcv1AczD4vso7G4Z3TKcvlxK7g7TNt3/FNGMhfqyntocvYKj+GCatfigGDjbLozC4baguJ0ReCigoDJXb0ag==}
@@ -2895,6 +2943,9 @@ packages:
     resolution: {integrity: sha512-Xf0nWe6RseziFMu+Ap9biiUbmplq6S9/p+7w7YXP/JBHhrUDDUhwa+vANyubuqfZWTveU//DYVGsDG7RKL/vEw==}
     engines: {node: '>=0.10.0'}
 
+  resize-observer-polyfill@1.5.1:
+    resolution: {integrity: sha512-LwZrotdHOo12nQuZlHEmtuXdqGoOD0OhaxopaNFxWzInpEgaLWoVuAMbTzixuosCx2nEG58ngzW3vxdWoxIgdg==}
+
   resolve-pkg-maps@1.0.0:
     resolution: {integrity: sha512-seS2Tj26TBVOC2NIc2rOe2y2ZO7efxITtLZcGSOnHHNOQ7CkiUBfw0Iw2ck6xkIhPwLhKNLS8BO+hEpngQlqzw==}
 
@@ -2940,6 +2991,9 @@ packages:
 
   setprototypeof@1.2.0:
     resolution: {integrity: sha512-E5LDX7Wrp85Kil5bhZv46j8jOeboKq5JMmYM3gVGdGH8xFpPWXUMsNrlODCrkoxMEeNi/XZIwuRvY4XNwYMJpw==}
+
+  shallow-equal@3.1.0:
+    resolution: {integrity: sha512-pfVOw8QZIXpMbhBWvzBISicvToTiM5WBF1EeAUZDDSb5Dt29yl4AYbyywbJFSEsRUMr7gJaxqCdr4L3tQf9wVg==}
 
   shebang-command@2.0.0:
     resolution: {integrity: sha512-kHxr2zZpYtdmrN1qDjrrX/Z1rR1kG8Dx+gkpK1G4eXmvXswmcE1hTWBWYUzlraYw1/yZp6YuDY77YtvbN0dmDA==}
@@ -3327,6 +3381,9 @@ packages:
         optional: true
       jsdom:
         optional: true
+
+  warning@4.0.3:
+    resolution: {integrity: sha512-rpJyN222KWIvHJ/F53XSZv0Zl/accqHR8et1kpaMTD/fLCRxtV8iX8czMzY7sVZupTI3zcUTg8eycS2kNF9l6w==}
 
   webgl-constants@1.1.1:
     resolution: {integrity: sha512-LkBXKjU5r9vAW7Gcu3T5u+5cvSvh5WwINdr0C+9jpzVB41cjQAP5ePArDtk/WHYdVj0GefCgM73BA7FlIiNtdg==}
@@ -4582,6 +4639,13 @@ snapshots:
     dependencies:
       '@types/react': 18.3.28
 
+  '@types/react-grid-layout@2.1.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      react-grid-layout: 2.2.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+    transitivePeerDependencies:
+      - react
+      - react-dom
+
   '@types/react-reconciler@0.26.7':
     dependencies:
       '@types/react': 18.3.28
@@ -4831,6 +4895,8 @@ snapshots:
     dependencies:
       clsx: 2.1.1
 
+  classnames@2.5.1: {}
+
   cliui@8.0.1:
     dependencies:
       string-width: 4.2.3
@@ -4993,6 +5059,8 @@ snapshots:
 
   didyoumean@1.2.2: {}
 
+  diff-match-patch@1.0.5: {}
+
   diff@8.0.3: {}
 
   dlv@1.1.3: {}
@@ -5129,6 +5197,8 @@ snapshots:
 
   extend@3.0.2: {}
 
+  fast-equals@4.0.3: {}
+
   fast-equals@5.4.0: {}
 
   fast-glob@3.3.3:
@@ -5212,6 +5282,8 @@ snapshots:
   get-tsconfig@4.13.6:
     dependencies:
       resolve-pkg-maps: 1.0.0
+
+  gitdiff-parser@0.3.1: {}
 
   glob-parent@5.1.2:
     dependencies:
@@ -5968,11 +6040,39 @@ snapshots:
       date-fns-jalali: 4.1.0-0
       react: 18.3.1
 
+  react-diff-view@3.3.2(react@18.3.1):
+    dependencies:
+      classnames: 2.5.1
+      diff-match-patch: 1.0.5
+      gitdiff-parser: 0.3.1
+      lodash: 4.17.23
+      react: 18.3.1
+      shallow-equal: 3.1.0
+      warning: 4.0.3
+
   react-dom@18.3.1(react@18.3.1):
     dependencies:
       loose-envify: 1.4.0
       react: 18.3.1
       scheduler: 0.23.2
+
+  react-draggable@4.5.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+    dependencies:
+      clsx: 2.1.1
+      prop-types: 15.8.1
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+
+  react-grid-layout@2.2.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+    dependencies:
+      clsx: 2.1.1
+      fast-equals: 4.0.3
+      prop-types: 15.8.1
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+      react-draggable: 4.5.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react-resizable: 3.1.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      resize-observer-polyfill: 1.5.1
 
   react-hook-form@7.71.2(react@18.3.1):
     dependencies:
@@ -6036,6 +6136,13 @@ snapshots:
     dependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
+
+  react-resizable@3.1.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+    dependencies:
+      prop-types: 15.8.1
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+      react-draggable: 4.5.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
   react-router-dom@6.30.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
@@ -6166,6 +6273,8 @@ snapshots:
 
   require-from-string@2.0.2: {}
 
+  resize-observer-polyfill@1.5.1: {}
+
   resolve-pkg-maps@1.0.0: {}
 
   resolve@1.22.11:
@@ -6255,6 +6364,8 @@ snapshots:
       - supports-color
 
   setprototypeof@1.2.0: {}
+
+  shallow-equal@3.1.0: {}
 
   shebang-command@2.0.0:
     dependencies:
@@ -6686,6 +6797,10 @@ snapshots:
       - terser
       - tsx
       - yaml
+
+  warning@4.0.3:
+    dependencies:
+      loose-envify: 1.4.0
 
   webgl-constants@1.1.1: {}
 

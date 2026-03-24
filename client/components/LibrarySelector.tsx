@@ -60,10 +60,10 @@ export function LibrarySelector({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
-          variant="outline"
+          variant="glass"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between h-auto min-h-[48px] py-3 px-4 bg-white hover:bg-muted border-4 border-black shadow-[6px_6px_0px_0px_black] hover:shadow-[4px_4px_0px_0px_black] hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
+          className="w-full justify-between h-auto min-h-[40px] py-2 px-3"
         >
           <div className="flex flex-wrap gap-2 flex-1 items-center">
             {selectedLibraries.length === 0 ? (
@@ -74,8 +74,8 @@ export function LibrarySelector({
                 return lib ? (
                   <Badge
                     key={id}
-                    variant="default"
-                    className="text-xs bg-primary text-white border-3 border-black hover:bg-primary shadow-[3px_3px_0px_0px_black] font-bold"
+                    variant="gradient"
+                    className="text-xs"
                   >
                     {lib.name}
                     {lib.supportsAST && (

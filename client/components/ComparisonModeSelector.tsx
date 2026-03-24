@@ -25,11 +25,11 @@ export function ComparisonModeSelector({
 }: ComparisonModeSelectorProps) {
   return (
     <div className={cn("flex items-center gap-2", className)}>
-      <label className="text-sm font-bold text-foreground whitespace-nowrap">
-        Comparison Mode:
+      <label className="text-xs font-bold text-foreground whitespace-nowrap">
+        Mode:
       </label>
       <Select value={mode} onValueChange={(value) => onChange(value as ComparisonMode)}>
-        <SelectTrigger className="w-[200px] h-9 border-3 border-black shadow-[4px_4px_0px_0px_black] bg-white hover:shadow-[2px_2px_0px_0px_black] hover:translate-x-[2px] hover:translate-y-[2px] transition-all">
+        <SelectTrigger className="w-[180px] h-8 glass-surface backdrop-blur-sm border border-glass-border shadow-soft hover:glass-surface-elevated hover:shadow-glass transition-all duration-300">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
@@ -55,8 +55,8 @@ export function ComparisonModeSelector({
       </Select>
       
       {mode === 'mixed' && (
-        <Badge variant="outline" className="text-xs bg-purple-50 border-purple-300 text-purple-700 font-bold">
-          Comparing different output types
+        <Badge variant="secondary" className="text-xs bg-purple-400/10 border border-purple-400/30 text-purple-700">
+          Mixed types
         </Badge>
       )}
     </div>

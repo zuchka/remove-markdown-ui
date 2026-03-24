@@ -1,41 +1,33 @@
 import { useState } from 'react';
-import { Copy, Check, Settings2, Code2, FileText, Sparkles, CodeXml, FileType } from 'lucide-react';
+import { Copy, Check, Settings2, Code2, Sparkles, CodeXml, FileType } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import type { LibraryInfo } from '@/lib/markdown-libraries/types';
 
-interface OutputPanelProps {
+interface OutputCardProps {
   library: LibraryInfo;
   output: string;
   error?: string;
   processingTime?: number;
-  isHTML?: boolean;
   hasCustomSettings?: boolean;
-  onCopy?: () => void;
   onShowAST?: () => void;
   onShowSettings?: () => void;
 }
 
-export function OutputPanel({
+export function OutputCard({
   library,
   output,
   error,
   processingTime,
-  isHTML = false,
   hasCustomSettings = false,
-  onCopy,
   onShowAST,
   onShowSettings,
-}: OutputPanelProps) {
+}: OutputCardProps) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
-    if (onCopy) {
-      onCopy();
-    } else {
-      await navigator.clipboard.writeText(output);
-    }
+    await navigator.clipboard.writeText(output);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -46,24 +38,18 @@ export function OutputPanel({
 
   return (
     <div className={cn(
-      "glass-card overflow-hidden flex flex-col h-[350px]",
+      "glass-card overflow-hidden flex flex-col min-h-[350px]",
       "border-l-4",
       isHTMLRenderer ? "glass-border-category-html" : "glass-border-category-text"
     )}>
-      {/* Header */}
-      <div className="glass-surface-elevated backdrop-blur-lg border-b border-glass-border px-4 py-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 flex-wrap">
-            <div className="flex items-center gap-1.5">
-              <div className="w-2 h-2 rounded-full bg-blue-500 shadow-soft"></div>
-              <div className="w-2 h-2 rounded-full bg-accent shadow-soft"></div>
-              <div className="w-2 h-2 rounded-full bg-destructive shadow-soft"></div>
-            </div>
-            <span className="ml-2 text-sm font-bold text-foreground">
+      {/* Stats Header */}
+      <div className="px-4 py-2 border-b border-glass-border glass-surface-elevated backdrop-blur-lg">
+        <div className="flex items-center justify-between flex-wrap gap-2">
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-bold text-foreground">
               {library.name}
             </span>
             <Badge
-              variant="secondary"
               className={cn(
                 "text-xs",
                 isHTMLRenderer
@@ -73,12 +59,12 @@ export function OutputPanel({
             >
               {isHTMLRenderer ? (
                 <>
-                  <CodeXml className="w-3.5 h-3.5 mr-1" />
+                  <CodeXml className="w-3 h-3 mr-1" />
                   HTML
                 </>
               ) : (
                 <>
-                  <FileType className="w-3.5 h-3.5 mr-1" />
+                  <FileType className="w-3 h-3 mr-1" />
                   Text
                 </>
               )}
@@ -112,6 +98,7 @@ export function OutputPanel({
                 size="sm"
                 onClick={onShowAST}
                 className="h-7 px-2"
+                title="View AST"
               >
                 <Code2 className="w-3.5 h-3.5" />
               </Button>
@@ -121,6 +108,7 @@ export function OutputPanel({
               size="sm"
               onClick={handleCopy}
               className="h-7 px-2"
+              title="Copy output"
             >
               {copied ? (
                 <Check className="w-3.5 h-3.5 text-blue-600" />
@@ -144,14 +132,14 @@ export function OutputPanel({
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-auto p-4 bg-transparent">
+      <div className="flex-1 overflow-auto p-4">
         {error ? (
           <div className="glass-surface backdrop-blur-sm border border-destructive/30 rounded-lg p-4 bg-destructive/5">
             <p className="text-sm text-destructive font-bold">Error:</p>
             <p className="text-sm text-destructive mt-1 font-medium">{error}</p>
           </div>
         ) : output ? (
-          isHTML ? (
+          isHTMLRenderer ? (
             <div 
               className="prose prose-sm max-w-none dark:prose-invert"
               dangerouslySetInnerHTML={{ __html: output }}
@@ -162,71 +150,11 @@ export function OutputPanel({
             </div>
           )
         ) : (
-          <div className="flex items-center justify-center h-full text-center text-muted-foreground py-8">
-            <div>
-              <div className="w-12 h-12 mx-auto mb-2 rounded-lg glass-surface backdrop-blur-sm border border-dashed border-glass-border flex items-center justify-center">
-                <FileText className="w-6 h-6 opacity-40" />
-              </div>
-              <p className="text-xs font-medium">Processing...</p>
-            </div>
+          <div className="flex items-center justify-center h-full text-center text-muted-foreground">
+            <p className="text-xs font-medium">Processing...</p>
           </div>
         )}
       </div>
-    </div>
-  );
-}
-
-interface OutputGridProps {
-  outputs: Array<{
-    libraryId: string;
-    library: LibraryInfo;
-    output: string;
-    error?: string;
-    processingTime?: number;
-  }>;
-  libraryOptions?: Record<string, Record<string, any>>;
-  onCopyOutput?: (libraryId: string, output: string) => void;
-  onShowAST?: (libraryId: string) => void;
-  onShowSettings?: (libraryId: string) => void;
-}
-
-export function OutputGrid({
-  outputs,
-  libraryOptions = {},
-  onCopyOutput,
-  onShowAST,
-  onShowSettings,
-}: OutputGridProps) {
-  // Helper to check if library has custom settings
-  const hasCustomSettings = (libraryId: string): boolean => {
-    const options = libraryOptions[libraryId];
-    if (!options) return false;
-
-    // Import needed here to avoid circular dependency
-    const { getLibraryAdapter } = require('@/lib/markdown-libraries/registry');
-    const adapter = getLibraryAdapter(libraryId);
-    if (!adapter) return false;
-
-    const defaults = adapter.getDefaultOptions();
-    return Object.keys(defaults).some(key => options[key] !== defaults[key]);
-  };
-
-  return (
-    <div className="flex flex-col gap-4 h-full">
-      {outputs.map(({ libraryId, library, output, error, processingTime }) => (
-        <OutputPanel
-          key={libraryId}
-          library={library}
-          output={output}
-          error={error}
-          processingTime={processingTime}
-          isHTML={library.category === 'renderer'}
-          hasCustomSettings={hasCustomSettings(libraryId)}
-          onCopy={() => onCopyOutput?.(libraryId, output)}
-          onShowAST={library.supportsAST ? () => onShowAST?.(libraryId) : undefined}
-          onShowSettings={() => onShowSettings?.(libraryId)}
-        />
-      ))}
     </div>
   );
 }
